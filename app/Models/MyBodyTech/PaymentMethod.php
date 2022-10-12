@@ -22,4 +22,12 @@ class PaymentMethod extends Model
      * @var string
      */
     protected $table = 'payment_method';
+
+    /**
+     * Get customer associated with the payment method.
+     */
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
 }
