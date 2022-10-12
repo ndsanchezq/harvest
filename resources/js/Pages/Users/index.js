@@ -1,7 +1,7 @@
 import React from "react";
 import Authenticated from "@/Layouts/Authenticated";
 
-function About(props) {
+function Users(props) {
   return (
     <Authenticated
       auth={props.auth}
@@ -17,4 +17,4 @@ function About(props) {
   );
 }
 
-export default About;
+export default Users;

@@ -29,7 +29,7 @@ function Navbar({ auth }) {
                 href={route("dashboard")}
                 active={route().current("dashboard")}
               >
-                Dashboard
+                Débito automático
               </NavLink>
             </div>
           </div>
