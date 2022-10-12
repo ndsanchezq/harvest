@@ -12,7 +12,9 @@ function Sidebar(props) {
           <li>
             <Link
               href={route("dashboard")}
-              className="flex items-center py-2 px-6 text-base font-normal text-gray-900 rounded-sm dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              className={`flex border-l-4 items-center py-2 px-6 text-base font-normal text-gray-900 rounded-sm dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                route().current("dashboard") && "border-orange-400"
+              }`}
             >
               <svg
                 aria-hidden="true"
@@ -30,8 +32,10 @@ function Sidebar(props) {
 
           <li>
             <Link
-              href="/about"
-              className="flex items-center py-2 px-6 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              href={route("users")}
+              className={`flex border-l-4 items-center py-2 px-6 text-base font-normal text-gray-900 rounded-sm dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                route().current("users") && "border-orange-400"
+              }`}
             >
               <svg
                 aria-hidden="true"
@@ -52,8 +56,10 @@ function Sidebar(props) {
           </li>
           <li>
             <Link
-              href="#"
-              className="flex items-center py-2 px-6 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700"
+              href={route("list")}
+              className={`flex border-l-4 items-center py-2 px-6 text-base font-normal text-gray-900 rounded-sm dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 ${
+                route().current("list") && "border-orange-400"
+              }`}
             >
               <svg
                 aria-hidden="true"
