@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Http\UseCases\GenerateNoveltyFileCase;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -38,6 +39,7 @@ class GenerateFiles extends Command
      */
     public function handle()
     {
-        Log::warning('Generando archivos.... Ok!');
+        $file = new GenerateNoveltyFileCase();
+        $file->index();
     }
 }
