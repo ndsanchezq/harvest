@@ -24,8 +24,14 @@ use Inertia\Inertia;
 //     ]);
 // });
 
-Route::get('/about', function () {
-    return Inertia::render('About');
+Route::get('/users', function () {
+    return Inertia::render('Users');
+})->name('users');
+
+Route::prefix('files')->group(function () {
+    route::get('/list', function () {
+        return Inertia::render('Files/List');
+    })->name('list');
 });
 
 Route::get('/', function () {
