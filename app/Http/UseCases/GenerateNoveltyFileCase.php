@@ -4,6 +4,7 @@ namespace App\Http\UseCases;
 
 use App\Http\Utils\FormatString;
 use App\Models\MyBodyTech\PaymentMethod;
+use Illuminate\Support\Facades\Storage;
 
 class GenerateNoveltyFileCase
 {
@@ -17,36 +18,47 @@ class GenerateNoveltyFileCase
      */
     public function index()
     {
+        $today = now()->format('Y-m-d');
+        $bancolombia_content_file = '';
+        $other_banks_content_file = '';
         $bancolombia_payment_methods = PaymentMethod::query()->accountsForValidating()->bancolombia()->take(10);
+        $other_banks_payment_methods = PaymentMethod::query()->accountsForValidating()->otherBanks()->take(10);
 
         // Registro de encabezado del archivo y registro de encabezado del lote
         [$headerRules, $headerLotRules, $content] = GetHeaderRulesCase::index();
 
+        $bancolombia_content_file .= $content;
+        $other_banks_content_file .= $content;
         // Registro de detalle
-        [$register_detail, $bancolombia_total_register] = $this->generateDetailRegister($bancolombia_payment_methods);
-        $content .= $register_detail;
+        [$bancolombia_register_detail, $bancolombia_total_register] = $this->generateDetailRegister($bancolombia_payment_methods);
+        [$other_banks_register_detail, $other_banks_total_register] = $this->generateDetailRegister($other_banks_payment_methods);
+        $bancolombia_content_file .= $bancolombia_register_detail;
+        $other_banks_content_file .= $other_banks_register_detail;
 
         // Registro de control del lote y registro de control del archivo
-        $content .= NoveltyControlRegisterCase::generate($bancolombia_total_register, '0001');
+        $bancolombia_content_file .= NoveltyControlRegisterCase::generate($bancolombia_total_register, '0001');
+        $other_banks_content_file .= NoveltyControlRegisterCase::generate($other_banks_total_register, '0002');
 
 
-        return \Storage::put('BANCOLOMBIA_NOVEDADES.txt', $content);
+        echo 'Archivo Bancolombia generado!!!';
 
-        echo 'Archivo generado';
+        Storage::put('/BANCOLOMBIA/' . $today . '_ACH_NOVEDADES.txt', $other_banks_content_file);
+        return Storage::put('/BANCOLOMBIA/' . $today . '_BANCOLOMBIA_NOVEDADES.txt', $bancolombia_content_file);
     }
 
     private function generateDetailRegister($payment_methods)
     {
         $content = '';
-        $counter = 1;
+        $counter = 0;
         foreach ($payment_methods->cursor() as $payment_method) {
+            $full_name = FormatString::removeAccents($payment_method->customer->first_name . ' ' . $payment_method->customer->last_name);
             $payment_method->load('customer');
             $primary_ref = FormatString::fill($payment_method->customer->did, '0', 48);
             $secondary_ref = FormatString::fill($payment_method->id, '0', 24) . str_repeat(' ', 6);
             $account_number = FormatString::fill($payment_method->account, '0', 17);
             $account_type = FormatString::fill($payment_method->account_type, '0', 2);
             $customer_did = FormatString::fill($payment_method->customer->did, '0', 10);
-            $customer_name = FormatString::fill(strtoupper($payment_method->customer->first_name . ' ' . $payment_method->customer->last_name), ' ', 22, true);
+            $customer_name = FormatString::fill(strtoupper($full_name), ' ', 22, true);
             $max_value = str_repeat('0', 14);
             $transaction_date = now()->format('Ymd');
             $sequence = FormatString::fill($counter, '0', 7);
