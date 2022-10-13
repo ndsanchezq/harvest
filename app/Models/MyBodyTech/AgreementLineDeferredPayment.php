@@ -88,4 +88,32 @@ class AgreementLineDeferredPayment extends Model
                 });
         });
     }
+
+    /**
+     * get only bancolombia accounts
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeBancolombia($query)
+    {
+        return $query->whereHas('agreementLines', function ($q) {
+            $q->whereHas('paymentMethod', function ($subq) {
+                $subq->where('banks_id', 4);
+            });
+        });
+    }
+
+    /**
+     * get ACH accounts
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOtherBanks($query)
+    {
+        return $query->whereHas('agreementLines', function ($q) {
+            $q->whereHas('paymentMethod', function ($subq) {
+                $subq->where('banks_id', '<>', 4);
+            });
+        });
+    }
 }
