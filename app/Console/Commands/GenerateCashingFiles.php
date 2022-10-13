@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Http\UseCases\CashingFileCase;
+use App\Http\UseCases\GenerateCashingFileCase;
 use Illuminate\Console\Command;
 
 class GenerateCashingFiles extends Command
@@ -38,6 +38,6 @@ class GenerateCashingFiles extends Command
      */
     public function handle()
     {
-        CashingFileCase::generate();
+        GenerateCashingFileCase::index();
     }
 }

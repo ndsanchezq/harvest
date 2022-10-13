@@ -6,25 +6,18 @@ use App\Http\Utils\FormatString;
 use App\Models\MyBodyTech\AgreementLineDeferredPayment;
 use Illuminate\Support\Facades\Storage;
 
-class CashingFileCase
+class GenerateCashingRegisterDetailCase
 {
     /**
-     * Generate cashing file
+     * Generate cashing register detail section
      * @author Neil David Sanchez Quintana
      * @return void
      */
-    public static function generate()
+    public static function index($deferred_payments)
     {
-        $today = now()->format('Y-m-d');
-        // Registro de encabezado del archivo y registro de encabezado del lote
-        [$headerRules, $headerLotRules, $content] = GetHeaderRulesCase::index();
-
-        // Prepare query
-        $query = AgreementLineDeferredPayment::query()->active()->debito()->bancolombia();
-
-
+        $content = '';
         $counter = 0;
-        foreach ($query->cursor() as $row) {
+        foreach ($deferred_payments->cursor() as $row) {
             $row->load('customer:id,did,first_name,last_name');
             $row->load(['agreementLines' => function ($q) {
                 $q->with('paymentMethod');
@@ -66,36 +59,6 @@ class CashingFileCase
             $counter++;
         }
 
-        if ($counter < 1) {
-            echo "No hay pagos pendientes para cuentas Bancolombia";
-            return false;
-        }
-
-        $totalCount = FormatString::fill($query->count(), '0', 9);
-        $totalAmountLot = FormatString::fill(number_format($query->sum('amount'), 2, '', ''), '0', 18);
-        $totalAmountAditional = FormatString::fill('0', '0', 18);
-        $totalWhiteSpaceReserved = FormatString::fill(' ', ' ', 173);
-
-        $content .= implode([
-            '08',
-            $totalCount,
-            $totalAmountLot,
-            $totalAmountAditional,
-            '0001',
-            $totalWhiteSpaceReserved,
-            "\n"
-        ]);
-
-        $content .= implode([
-            '09',
-            $totalCount,
-            $totalAmountLot,
-            $totalAmountAditional,
-            $totalWhiteSpaceReserved
-        ]);
-
-        Storage::put('/BANCOLOMBIA/' . $today . '_BANCOLOMBIA_COBROS', $content);
-
-        return true;
+        return [$content, $counter];
     }
 }

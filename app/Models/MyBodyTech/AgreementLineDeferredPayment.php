@@ -67,7 +67,8 @@ class AgreementLineDeferredPayment extends Model
             $q->where('line_status', 1)
                 ->whereNotNull('payment_method_id')
                 ->whereHas('paymentMethod', function ($subq) {
-                    $subq->whereIn('account_type', [1, 2]);
+                    $subq->whereIn('account_type', [1, 2])
+                    // ->where('payment_method_validation_status', 'validada');
                 });
         });
     }
