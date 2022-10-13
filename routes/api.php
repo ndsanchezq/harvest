@@ -26,11 +26,13 @@ Route::get('/status', function () {
     $headerRules = FileHeaderRule::where('bank_id', 4)->first();
     if (!$headerRules instanceof FileHeaderRule) {
         Log::error('No fue posible recuperar el encabezado del archivo');
+        return;
     }
 
     $headerLotRules = FileLotHeaderRule::where('bank_id', 4)->first();
     if (!$headerLotRules instanceof FileLotHeaderRule) {
         Log::error('No fue posible recuperar el encabezado de lote del archivo');
+        return;
     }
 
     // Header file
@@ -55,7 +57,8 @@ Route::get('/status', function () {
         "\n"
     ]);
 
-    function validateAndFormatRow ($string, $character, $length) {
+    function validateAndFormatRow($string, $character, $length)
+    {
         return strlen($string) < $length
             ? str_repeat($character, $length - strlen($string)) . $string
             : $string;
