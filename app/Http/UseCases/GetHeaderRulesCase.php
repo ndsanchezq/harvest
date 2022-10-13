@@ -4,10 +4,11 @@ namespace App\Http\UseCases;
 
 use App\Models\FileHeaderRule;
 use App\Models\FileLotHeaderRule;
+use Illuminate\Support\Facades\Log;
 
 class GetHeaderRulesCase
 {
-    public static function index()
+    public static function index($set_number = '----', $modifier = '-')
     {
         // Validations
         $headerRules = FileHeaderRule::where('bank_id', 4)->first();
@@ -29,7 +30,7 @@ class GetHeaderRulesCase
             $headerRules->did_additional_collector_company_value,
             $headerRules->financial_entity_code_value,
             now()->format('YmdHi'),
-            'A',
+            $modifier,
             str_repeat(' ', $headerRules->reserved_white_spaces),
             "\n"
         ]);
@@ -38,11 +39,13 @@ class GetHeaderRulesCase
         $content .= implode([
             $headerLotRules->register_type_value,
             $headerLotRules->invoiced_service_code_value,
-            $headerLotRules->lot_number_value,
+            $set_number,
             $headerLotRules->invoiced_service_description_value,
             str_repeat(' ', $headerLotRules->reserved_white_spaces),
             "\n"
         ]);
+
+        echo $content;
 
         return [$headerRules, $headerLotRules, $content];
     }
