@@ -3,8 +3,6 @@
 namespace App\Http\UseCases;
 
 use App\Http\Utils\FormatString;
-use App\Models\MyBodyTech\AgreementLineDeferredPayment;
-use Illuminate\Support\Facades\Storage;
 
 class GenerateCashingRegisterDetailCase
 {
