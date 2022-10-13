@@ -30,4 +30,24 @@ class PaymentMethod extends Model
     {
         return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
+
+    /**
+     * get accounts for validationg
+     */
+    public function scopeAccountsForValidating($query)
+    {
+        $query->where('account_type', '<>', 0)->whereNull('payment_method_validation_status')->whereNotNull('banks_id');
+    }
+
+    /**Get only bancolombia accounts */
+    public function scopeBancolombia($query)
+    {
+        $query->where('banks_id', 4);
+    }
+
+    /**Get other banks accounts */
+    public function scopeOtherBanks($query)
+    {
+        $query->where('banks_id', '<>', 4);
+    }
 }

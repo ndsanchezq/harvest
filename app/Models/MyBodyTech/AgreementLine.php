@@ -46,4 +46,25 @@ class AgreementLine extends Model
     {
         return $this->hasMany(AgreementLineDeferredPayment::class, 'agreement_lines_id', 'id');
     }
+
+    /**
+     * Get all active agreement lines with his payments
+     */
+    public function scopeAccountsForValidating($query)
+    {
+        return $query->whereHas('paymentMethod', function ($q) {
+            $q->whereNull('payment_method_validation_status')
+                ->whereIn('account_type', [1, 2]);
+        });
+    }
+
+    /**
+     * Get recurring agreement lines
+     */
+    public function scopeIsRecurring($query)
+    {
+        return $query->whereHas('product', function ($q) {
+            $q->where('is_recurring', 1);
+        });
+    }
 }
