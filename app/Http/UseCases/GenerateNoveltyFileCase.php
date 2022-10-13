@@ -18,32 +18,48 @@ class GenerateNoveltyFileCase
      */
     public function index()
     {
+        $set_number = '0003';
+        $modifier = 'C';
         $today = now()->format('Y-m-d');
-        $bancolombia_content_file = '';
-        $other_banks_content_file = '';
         $bancolombia_payment_methods = PaymentMethod::query()->accountsForValidating()->bancolombia()->take(10);
         $other_banks_payment_methods = PaymentMethod::query()->accountsForValidating()->otherBanks()->take(10);
 
-        // Registro de encabezado del archivo y registro de encabezado del lote
-        [$headerRules, $headerLotRules, $content] = GetHeaderRulesCase::index();
+        /**Generar Novedades para cuentas bancolombia */
+        if ($bancolombia_payment_methods->count() < 1) {
+            echo "No se genero archivo novedades para cuentas Bancolombia";
+        } else {
+            // Registro de encabezado del archivo y registro de encabezado del lote
+            [$headerRules, $headerLotRules, $bancolombia_content_file] = GetHeaderRulesCase::index($set_number, $modifier);
 
-        $bancolombia_content_file .= $content;
-        $other_banks_content_file .= $content;
-        // Registro de detalle
-        [$bancolombia_register_detail, $bancolombia_total_register] = $this->generateDetailRegister($bancolombia_payment_methods);
-        [$other_banks_register_detail, $other_banks_total_register] = $this->generateDetailRegister($other_banks_payment_methods);
-        $bancolombia_content_file .= $bancolombia_register_detail;
-        $other_banks_content_file .= $other_banks_register_detail;
+            // Registro de detalle
+            [$bancolombia_register_detail, $bancolombia_total_register] = $this->generateDetailRegister($bancolombia_payment_methods);
+            $bancolombia_content_file .= $bancolombia_register_detail;
 
-        // Registro de control del lote y registro de control del archivo
-        $bancolombia_content_file .= NoveltyControlRegisterCase::generate($bancolombia_total_register, '0001');
-        $other_banks_content_file .= NoveltyControlRegisterCase::generate($other_banks_total_register, '0002');
+            // Registro de control del lote y registro de control del archivo
+            $bancolombia_content_file .= NoveltyControlRegisterCase::generate($bancolombia_total_register, $set_number);
 
+            Storage::put('/BANCOLOMBIA/' . $today . '_BANCOLOMBIA_NOVEDADES.txt', $bancolombia_content_file);
+        }
 
-        echo 'Archivo Bancolombia generado!!!';
+        $set_number = '0004';
+        $modifier = 'D';
+        /**Generar Novedades para cuentas otros bancos */
+        if ($other_banks_payment_methods->count() < 1) {
+            echo "No se genero archivo novedades para cuentas Bancolombia";
+        } else {
+            // Registro de encabezado del archivo y registro de encabezado del lote
+            [$headerRules, $headerLotRules, $other_banks_content_file] = GetHeaderRulesCase::index($set_number, $modifier);
 
-        Storage::put('/BANCOLOMBIA/' . $today . '_ACH_NOVEDADES.txt', $other_banks_content_file);
-        return Storage::put('/BANCOLOMBIA/' . $today . '_BANCOLOMBIA_NOVEDADES.txt', $bancolombia_content_file);
+            // Registro de detalle
+            [$other_banks_register_detail, $other_banks_total_register] = $this->generateDetailRegister($other_banks_payment_methods);
+            $other_banks_content_file .= $other_banks_register_detail;
+
+            // Registro de control del lote y registro de control del archivo
+            $other_banks_content_file .= NoveltyControlRegisterCase::generate($other_banks_total_register, $set_number);
+            Storage::put('/BANCOLOMBIA/' . $today . '_ACH_NOVEDADES.txt', $other_banks_content_file);
+        }
+
+        return true;
     }
 
     private function generateDetailRegister($payment_methods)

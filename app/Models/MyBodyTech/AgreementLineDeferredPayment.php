@@ -68,6 +68,7 @@ class AgreementLineDeferredPayment extends Model
                 ->whereNotNull('payment_method_id')
                 ->whereHas('paymentMethod', function ($subq) {
                     $subq->whereIn('account_type', [1, 2]);
+                    // ->where('payment_method_validation_status', 'validada');
                 });
         });
     }
@@ -86,6 +87,34 @@ class AgreementLineDeferredPayment extends Model
                 ->whereHas('paymentMethod', function ($subq) {
                     $subq->where('account_type', 0);
                 });
+        });
+    }
+
+    /**
+     * get only bancolombia accounts
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeBancolombia($query)
+    {
+        return $query->whereHas('agreementLines', function ($q) {
+            $q->whereHas('paymentMethod', function ($subq) {
+                $subq->where('banks_id', 4);
+            });
+        });
+    }
+
+    /**
+     * get ACH accounts
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOtherBanks($query)
+    {
+        return $query->whereHas('agreementLines', function ($q) {
+            $q->whereHas('paymentMethod', function ($subq) {
+                $subq->where('banks_id', '<>', 4);
+            });
         });
     }
 }

@@ -21,7 +21,7 @@ class NoveltyControlRegisterCase
         $reserved_white_spaces_file = str_repeat(' ', 191);
         $count = FormatString::fill($total_register, '0', 9);
         $content = self::REGISTER_TYPE_SET . $count . $set_number . $total_value . $reserved_white_spaces_set . "\n";
-        $content .= self::REGISTER_TYPE_FILE . $count . $total_value . $reserved_white_spaces_file . "\n";
+        $content .= self::REGISTER_TYPE_FILE . $count . $total_value . $reserved_white_spaces_file;
 
         return $content;
     }
