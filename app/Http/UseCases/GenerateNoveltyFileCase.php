@@ -3,9 +3,6 @@
 namespace App\Http\UseCases;
 
 use App\Http\Utils\FormatString;
-use App\Models\FileHeaderRule;
-use App\Models\FileLotHeaderRule;
-use App\Models\MyBodyTech\AgreementLine;
 use App\Models\MyBodyTech\PaymentMethod;
 
 class GenerateNoveltyFileCase
@@ -20,17 +17,17 @@ class GenerateNoveltyFileCase
      */
     public function index()
     {
+        $bancolombia_payment_methods = PaymentMethod::query()->accountsForValidating()->bancolombia()->take(10);
 
-        $headers = new GetHeaderRulesCase();
-        [$headerRules, $headerLotRules, $content] = $headers->index();
+        // Registro de encabezado del archivo y registro de encabezado del lote
+        [$headerRules, $headerLotRules, $content] = GetHeaderRulesCase::index();
 
-        $bancolombia_payment_methods = PaymentMethod::query();
-        $bancolombia_payment_methods->accountsForValidating()->bancolombia()->take(10);
-
-        [$register_detail, $counter_detail] = $this->generateDetailRegister($bancolombia_payment_methods);
+        // Registro de detalle
+        [$register_detail, $bancolombia_total_register] = $this->generateDetailRegister($bancolombia_payment_methods);
         $content .= $register_detail;
 
-        $content .= NoveltySetControlRegisterCase::generate($counter_detail, '0001');
+        // Registro de control del lote y registro de control del archivo
+        $content .= NoveltyControlRegisterCase::generate($bancolombia_total_register, '0001');
 
 
         return \Storage::put('BANCOLOMBIA_NOVEDADES.txt', $content);

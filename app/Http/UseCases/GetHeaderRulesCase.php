@@ -7,7 +7,7 @@ use App\Models\FileLotHeaderRule;
 
 class GetHeaderRulesCase
 {
-    public function index()
+    public static function index()
     {
         // Validations
         $headerRules = FileHeaderRule::where('bank_id', 4)->first();
