@@ -27,10 +27,22 @@ class GenerateNoveltyFileCase
         $bancolombia_payment_methods = PaymentMethod::query();
         $bancolombia_payment_methods->accountsForValidating()->bancolombia()->take(10);
 
-        // dd($payment_methods);
+        [$register_detail, $counter_detail] = $this->generateDetailRegister($bancolombia_payment_methods);
+        $content .= $register_detail;
 
-        $counter = 0;
-        foreach ($bancolombia_payment_methods->cursor() as $payment_method) {
+        $content .= NoveltySetControlRegisterCase::generate($counter_detail, '0001');
+
+
+        return \Storage::put('BANCOLOMBIA_NOVEDADES.txt', $content);
+
+        echo 'Archivo generado';
+    }
+
+    private function generateDetailRegister($payment_methods)
+    {
+        $content = '';
+        $counter = 1;
+        foreach ($payment_methods->cursor() as $payment_method) {
             $payment_method->load('customer');
             $primary_ref = FormatString::fill($payment_method->customer->did, '0', 48);
             $secondary_ref = FormatString::fill($payment_method->id, '0', 24) . str_repeat(' ', 6);
@@ -75,10 +87,10 @@ class GenerateNoveltyFileCase
                 . $partial_debit
                 . $reserved_white_spaces
                 . "\n";
+
+            $counter++;
         }
 
-        return \Storage::put('BANCOLOMBIA_NOVEDADES.txt', $content);
-
-        echo 'Archivo generado';
+        return [$content, $counter];
     }
 }
