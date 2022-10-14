@@ -1,109 +1,100 @@
-import React, { useEffect } from "react";
-import Button from "@/Components/Button";
-import Checkbox from "@/Components/Checkbox";
-import Guest from "@/Layouts/Guest";
-import Input from "@/Components/Input";
-import Label from "@/Components/Label";
-import ValidationErrors from "@/Components/ValidationErrors";
-import { Head, Link, useForm } from "@inertiajs/inertia-react";
+import { useState } from 'react';
+import { Head } from '@inertiajs/inertia-react';
+import { Container, Typography, Stack, IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
+import Logo from '@/Components/Logo';
+import { FormProvider, BDTextField } from '@/Components/hooks-form';
+import useResponsive from '@/Hooks/useResponsive';
+import { useForm } from 'react-hook-form';
+import { RootStyle, HeaderStyle, SectionStyle, ContentStyle } from './styles';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 
-export default function Login({ status, canResetPassword }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        username: "",
-        password: "",
-        remember: "",
-    });
+export default function Login({ status }) {
+  const mdUp = useResponsive('up', 'md');
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-    useEffect(() => {
-        return () => {
-            reset("password");
-        };
-    }, []);
+  const LoginSchema = yup.object().shape({
+    username: yup.string().required('Username is required'),
+    password: yup.string().required('Password is required')
+  }).required();
 
-    const onHandleChange = (event) => {
-        setData(
-            event.target.name,
-            event.target.type === "checkbox"
-                ? event.target.checked
-                : event.target.value
-        );
-    };
+  const defaultValues = {
+    username: '',
+    password: ''
+  };
 
-    const submit = (e) => {
-        e.preventDefault();
+  const methods = useForm({
+    resolver: yupResolver(LoginSchema),
+    defaultValues
+  });
 
-        post(route("login"));
-    };
+  const {
+    handleSubmit
+  } = methods;
 
-    return (
-        <Guest>
-            <Head title="Log in" />
+  const onSubmit = async (data) => {
+    setLoading(true);
 
-            {status && (
-                <div className="mb-4 font-medium text-sm text-green-600">
-                    {status}
-                </div>
-            )}
+    axios.post(route('login'), data)
+      .catch(err => {
+        setLoading(false);
+      });
+  };
 
-            <ValidationErrors errors={errors} />
+  return (
+    <RootStyle>
+      <Head title="Log in" />
 
-            <form onSubmit={submit}>
-                <div>
-                    <Label forInput="username" value="Usuario" />
+      <HeaderStyle>
+        <Logo />
+      </HeaderStyle>
 
-                    <Input
-                        type="text"
-                        name="username"
-                        value={data.username}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        isFocused={true}
-                        handleChange={onHandleChange}
-                    />
-                </div>
+      {mdUp && (
+        <SectionStyle>
+          <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
+            Holi, Welcome Back 🤫
+          </Typography>
+        </SectionStyle>
+      )}
 
-                <div className="mt-4">
-                    <Label forInput="password" value="Contraseña" />
+      <Container maxWidth="sm">
+        <ContentStyle>
+          <Typography variant="h4" gutterBottom>
+            Sign in
+          </Typography>
 
-                    <Input
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                        handleChange={onHandleChange}
-                    />
-                </div>
+          <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+            <Stack spacing={2}>
+              <BDTextField
+                name="username"
+                label="Username"
+              />
 
-                <div className="block mt-4">
-                    <label className="flex items-center">
-                        <Checkbox
-                            name="remember"
-                            value={data.remember}
-                            handleChange={onHandleChange}
-                        />
+              <BDTextField
+                name="password"
+                label="Password"
+                type={showPassword ? 'text' : 'password'}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
 
-                        <span className="ml-2 text-sm text-gray-600">
-                            Recordarme
-                        </span>
-                    </label>
-                </div>
-
-                <div className="flex items-center justify-end mt-4">
-                    {/* {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="underline text-sm text-gray-600 hover:text-gray-900"
-                        >
-                            Forgot your password?
-                        </Link>
-                    )} */}
-
-                    <Button className="ml-4" processing={processing}>
-                        Ingresar
-                    </Button>
-                </div>
-            </form>
-        </Guest>
-    );
+              <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={loading}>
+                Login
+              </LoadingButton>
+            </Stack>
+          </FormProvider>
+        </ContentStyle>
+      </Container>
+    </RootStyle>
+  );
 }

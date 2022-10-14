@@ -1,10 +1,10 @@
 import React from "react";
-import Authenticated from "@/Layouts/Authenticated";
+import Main from "@/Layouts/Main";
 import { Head } from "@inertiajs/inertia-react";
 
 export default function Dashboard(props) {
   return (
-    <Authenticated auth={props.auth} errors={props.errors}>
+    <Main auth={props.auth} errors={props.errors}>
       <div className="py-12">
         <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
           <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -14,6 +14,6 @@ export default function Dashboard(props) {
           </div>
         </div>
       </div>
-    </Authenticated>
+    </Main>
   );
 }
