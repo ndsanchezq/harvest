@@ -3,7 +3,7 @@
 namespace App\Http\UseCases;
 
 use App\Models\FileHeaderRule;
-use App\Models\FileLotHeaderRule;
+use App\Models\FileSetHeaderRule;
 use Illuminate\Support\Facades\Log;
 
 class GetHeaderRulesCase
@@ -17,8 +17,8 @@ class GetHeaderRulesCase
             return;
         }
 
-        $headerLotRules = FileLotHeaderRule::where('bank_id', 4)->first();
-        if (!$headerLotRules instanceof FileLotHeaderRule) {
+        $headerLotRules = FileSetHeaderRule::where('bank_id', 4)->first();
+        if (!$headerLotRules instanceof FileSetHeaderRule) {
             Log::error('No fue posible recuperar el encabezado de lote del archivo');
             return;
         }
@@ -44,8 +44,6 @@ class GetHeaderRulesCase
             str_repeat(' ', $headerLotRules->reserved_white_spaces),
             "\n"
         ]);
-
-        echo $content;
 
         return [$headerRules, $headerLotRules, $content];
     }

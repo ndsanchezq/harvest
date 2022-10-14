@@ -23,6 +23,7 @@ class CreateCashingFilesTable extends Migration
             $table->integer('lines_number')->nullable();
             $table->unsignedBigInteger('bank_id');
             $table->boolean('received')->default(false);
+            $table->enum('file_status', ['draft', 'completed'])->default('draft');
             $table->boolean('status')->default(true);
             $table->timestamps();
 

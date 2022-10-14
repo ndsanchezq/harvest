@@ -2,6 +2,7 @@
 
 namespace App\Http\UseCases;
 
+use App\Models\CashingFile;
 use App\Models\MyBodyTech\AgreementLineDeferredPayment;
 use Illuminate\Support\Facades\Storage;
 
@@ -34,7 +35,9 @@ class GenerateCashingFileCase
             // generar registro de control de lote y de archivo
             $bancolombia_content_file .= GenerateCashingRegisterControlCase::index($bancolombia_deferred_payments);
 
-            Storage::put('/BANCOLOMBIA/' . $today . '_BANCOLOMBIA_COBROS', $bancolombia_content_file);
+            $file_name = $today . '_BANCOLOMBIA_COBROS.txt';
+            $path = 'BANCOLOMBIA/' . $file_name;
+            self::storeFile($file_name, $path, $bancolombia_content_file, $modifier, $bancolombia_total_register + 4);
         }
 
         /**Generar pagos para cuentas otros bancos */
@@ -53,9 +56,32 @@ class GenerateCashingFileCase
             // generar registro de control de lote y de archivo
             $other_banks_content_file .= GenerateCashingRegisterControlCase::index($other_banks_deferred_payments);
 
-            Storage::put('/BANCOLOMBIA/' . $today . '_ACH_COBROS', $other_banks_content_file);
+            $file_name = $today . '_ACH_COBROS.txt';
+            $path = 'BANCOLOMBIA/' . $file_name;
+            self::storeFile($file_name, $path, $other_banks_content_file, $modifier, $other_banks_total_register + 4);
         }
 
         return true;
+    }
+
+    public function storeFile($file_name, $path, $content, $modifier, $lines_number)
+    {
+        $today = now()->format('Y-m-d');
+        $file = Storage::put($path, $content);
+        if ($file) {
+            $payload = [
+                'name' => $file_name,
+                'path' => $path,
+                'delivery_date' => $today,
+                'modifier' => $modifier,
+                'size' => Storage::size($path),
+                'lines_number' => $lines_number,
+                'bank_id' => 4,
+                'file_status' => 'completed',
+            ];
+            CashingFile::create($payload);
+        }
+
+        return $file;
     }
 }
