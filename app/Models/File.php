@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CashingFile extends Model
+class File extends Model
 {
     use HasFactory;
 
@@ -23,6 +23,7 @@ class CashingFile extends Model
         'lines_number',
         'bank_id',
         'received',
+        'file_type',
         'file_status',
         'status'
     ];

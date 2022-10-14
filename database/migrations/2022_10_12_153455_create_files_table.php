@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNoveltiesFilesTable extends Migration
+class CreateFilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateNoveltiesFilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('novelties_files', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('path');
@@ -21,13 +21,14 @@ class CreateNoveltiesFilesTable extends Migration
             $table->string('modifier');
             $table->integer('size')->nullable();
             $table->integer('lines_number')->nullable();
-            $table->unsignedBigInteger('cashing_file_id')->nullable();
             $table->unsignedBigInteger('bank_id');
+            $table->boolean('received')->default(false);
+            $table->enum('file_status', ['draft', 'completed'])->default('draft');
+            $table->enum('file_type', ['novedad', 'cobro'])->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
 
             /** Foreign keys */
-            $table->foreign('cashing_file_id')->references('id')->on('cashing_files')->onDelete('cascade')->onUpdate('cascade');
             $table->foreign('bank_id')->references('id')->on('banks')->onDelete('cascade')->onUpdate('cascade');
         });
     }
@@ -39,6 +40,6 @@ class CreateNoveltiesFilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('novelties_files');
+        Schema::dropIfExists('files');
     }
 }

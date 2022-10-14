@@ -2,9 +2,8 @@
 
 namespace App\Http\UseCases;
 
-use App\Models\CashingFile;
+use App\Http\UseCases\StoreFileCase;
 use App\Models\MyBodyTech\AgreementLineDeferredPayment;
-use Illuminate\Support\Facades\Storage;
 
 class GenerateCashingFileCase
 {
@@ -17,6 +16,7 @@ class GenerateCashingFileCase
     {
         $modifier = 'A';
         $set_number = '0001';
+        $file_type = 'cobro';
         $today = now()->format('Y-m-d');
         $bancolombia_deferred_payments = AgreementLineDeferredPayment::query()->active()->debito()->bancolombia();
         $other_banks_deferred_payments = AgreementLineDeferredPayment::query()->active()->debito()->otherBanks();
@@ -37,7 +37,7 @@ class GenerateCashingFileCase
 
             $file_name = $today . '_BANCOLOMBIA_COBROS.txt';
             $path = 'BANCOLOMBIA/' . $file_name;
-            self::storeFile($file_name, $path, $bancolombia_content_file, $modifier, $bancolombia_total_register + 4);
+            StoreFileCase::index($file_name, $path, $bancolombia_content_file, $modifier, $bancolombia_total_register + 4, $file_type);
         }
 
         /**Generar pagos para cuentas otros bancos */
@@ -58,30 +58,30 @@ class GenerateCashingFileCase
 
             $file_name = $today . '_ACH_COBROS.txt';
             $path = 'BANCOLOMBIA/' . $file_name;
-            self::storeFile($file_name, $path, $other_banks_content_file, $modifier, $other_banks_total_register + 4);
+            StoreFileCase::index($file_name, $path, $other_banks_content_file, $modifier, $other_banks_total_register + 4, $file_type);
         }
 
         return true;
     }
 
-    public function storeFile($file_name, $path, $content, $modifier, $lines_number)
-    {
-        $today = now()->format('Y-m-d');
-        $file = Storage::put($path, $content);
-        if ($file) {
-            $payload = [
-                'name' => $file_name,
-                'path' => $path,
-                'delivery_date' => $today,
-                'modifier' => $modifier,
-                'size' => Storage::size($path),
-                'lines_number' => $lines_number,
-                'bank_id' => 4,
-                'file_status' => 'completed',
-            ];
-            CashingFile::create($payload);
-        }
+    // public function storeFile($file_name, $path, $content, $modifier, $lines_number)
+    // {
+    //     $today = now()->format('Y-m-d');
+    //     $file = Storage::put($path, $content);
+    //     if ($file) {
+    //         $payload = [
+    //             'name' => $file_name,
+    //             'path' => $path,
+    //             'delivery_date' => $today,
+    //             'modifier' => $modifier,
+    //             'size' => Storage::size($path),
+    //             'lines_number' => $lines_number,
+    //             'bank_id' => 4,
+    //             'file_status' => 'completed',
+    //         ];
+    //         File::create($payload);
+    //     }
 
-        return $file;
-    }
+    //     return $file;
+    // }
 }
