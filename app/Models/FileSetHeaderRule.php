@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class FileLotHeaderRule extends Model
+class FileSetHeaderRule extends Model
 {
     use HasFactory;
 

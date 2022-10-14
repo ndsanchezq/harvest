@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\FileLotHeaderRule;
+use App\Models\FileSetHeaderRule;
 use Illuminate\Database\Seeder;
 
-class FileLotHeaderRuleSeeder extends Seeder
+class FileSetHeaderRuleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,7 +14,7 @@ class FileLotHeaderRuleSeeder extends Seeder
      */
     public function run()
     {
-        FileLotHeaderRule::insert([
+        FileSetHeaderRule::insert([
             'register_type_value' => '05',
             'register_type_lenght' => 2,
             'invoiced_service_code_value' => '0000830053700',
