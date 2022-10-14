@@ -36,7 +36,7 @@ class PaymentMethod extends Model
      */
     public function scopeAccountsForValidating($query)
     {
-        $query->where('account_type', '<>', 0)->whereNull('payment_method_validation_status')->whereNotNull('banks_id');
+        $query->where('account_type', '<>', 0)->where('payment_method_validation_status', 'pendiente')->whereNotNull('banks_id');
     }
 
     /**Get only bancolombia accounts */
