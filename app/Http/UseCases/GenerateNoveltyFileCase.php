@@ -4,7 +4,7 @@ namespace App\Http\UseCases;
 
 use App\Http\Utils\FormatString;
 use App\Models\MyBodyTech\PaymentMethod;
-use Illuminate\Support\Facades\Storage;
+use App\Http\UseCases\StoreFileCase;
 
 class GenerateNoveltyFileCase
 {
@@ -20,6 +20,7 @@ class GenerateNoveltyFileCase
     {
         $set_number = '0003';
         $modifier = 'C';
+        $file_type = 'novedad';
         $today = now()->format('Y-m-d');
         $bancolombia_payment_methods = PaymentMethod::query()->accountsForValidating()->bancolombia()->take(10);
         $other_banks_payment_methods = PaymentMethod::query()->accountsForValidating()->otherBanks()->take(10);
@@ -38,7 +39,10 @@ class GenerateNoveltyFileCase
             // Registro de control del lote y registro de control del archivo
             $bancolombia_content_file .= NoveltyControlRegisterCase::generate($bancolombia_total_register, $set_number);
 
-            Storage::put('/BANCOLOMBIA/' . $today . '_BANCOLOMBIA_NOVEDADES.txt', $bancolombia_content_file);
+            // Store file
+            $file_name = $today . '_BANCOLOMBIA_NOVEDADES.txt';
+            $path = 'BANCOLOMBIA/' . $file_name;
+            StoreFileCase::index($file_name, $path, $bancolombia_content_file, $modifier, $bancolombia_total_register + 4, $file_type);
         }
 
         $set_number = '0004';
@@ -56,7 +60,11 @@ class GenerateNoveltyFileCase
 
             // Registro de control del lote y registro de control del archivo
             $other_banks_content_file .= NoveltyControlRegisterCase::generate($other_banks_total_register, $set_number);
-            Storage::put('/BANCOLOMBIA/' . $today . '_ACH_NOVEDADES.txt', $other_banks_content_file);
+
+            // Store file
+            $file_name = $today . '_ACH_NOVEDADES.txt';
+            $path = 'BANCOLOMBIA/' . $file_name;
+            StoreFileCase::index($file_name, $path, $other_banks_content_file, $modifier, $other_banks_total_register + 4, $file_type);
         }
 
         return true;

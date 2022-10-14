@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCashingFilesTable extends Migration
+class CreateFilesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateCashingFilesTable extends Migration
      */
     public function up()
     {
-        Schema::create('cashing_files', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('path');
@@ -23,6 +23,8 @@ class CreateCashingFilesTable extends Migration
             $table->integer('lines_number')->nullable();
             $table->unsignedBigInteger('bank_id');
             $table->boolean('received')->default(false);
+            $table->enum('file_status', ['draft', 'completed'])->default('draft');
+            $table->enum('file_type', ['novedad', 'cobro'])->nullable();
             $table->boolean('status')->default(true);
             $table->timestamps();
 
@@ -38,6 +40,6 @@ class CreateCashingFilesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cashing_files');
+        Schema::dropIfExists('files');
     }
 }
