@@ -22,4 +22,24 @@ class Payment extends Model
      * @var string
      */
     protected $table = 'payment';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'payment_date',
+        'amount',
+        'payment_type_id',
+        'num_payment',
+        'note',
+        'status',
+        'users_creator',
+        'users_at_update',
+        'created_at',
+        'created_at_db',
+        'agreement_lines_id',
+        'agreement_id'
+    ];
 }

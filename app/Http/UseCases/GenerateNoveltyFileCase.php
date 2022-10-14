@@ -77,8 +77,8 @@ class GenerateNoveltyFileCase
         foreach ($payment_methods->cursor() as $payment_method) {
             $full_name = FormatString::removeAccents($payment_method->customer->first_name . ' ' . $payment_method->customer->last_name);
             $payment_method->load('customer');
-            $primary_ref = FormatString::fill($payment_method->customer->did, '0', 48);
-            $secondary_ref = FormatString::fill($payment_method->id, '0', 24) . str_repeat(' ', 6);
+            $primary_ref = FormatString::fill($payment_method->id, '0', 48);
+            $secondary_ref = FormatString::fill($payment_method->customer->id, '0', 24) . str_repeat(' ', 6);
             $account_number = FormatString::fill($payment_method->account, '0', 17);
             $account_type = FormatString::fill($payment_method->account_type, '0', 2);
             $customer_did = FormatString::fill($payment_method->customer->did, '0', 10);
