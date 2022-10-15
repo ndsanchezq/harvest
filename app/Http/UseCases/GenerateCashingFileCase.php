@@ -41,6 +41,7 @@ class GenerateCashingFileCase
         }
 
         /**Generar pagos para cuentas otros bancos */
+        echo $other_banks_deferred_payments->count();
         $modifier = 'B';
         $set_number = '0002';
         if ($other_banks_deferred_payments->count() < 1) {
@@ -53,6 +54,8 @@ class GenerateCashingFileCase
             [$register_detail_content, $other_banks_total_register] = GenerateCashingRegisterDetailCase::index($other_banks_deferred_payments);
             $other_banks_content_file .= $register_detail_content;
 
+            echo $other_banks_total_register;
+
             // generar registro de control de lote y de archivo
             $other_banks_content_file .= GenerateCashingRegisterControlCase::index($other_banks_deferred_payments);
 
@@ -63,25 +66,4 @@ class GenerateCashingFileCase
 
         return true;
     }
-
-    // public function storeFile($file_name, $path, $content, $modifier, $lines_number)
-    // {
-    //     $today = now()->format('Y-m-d');
-    //     $file = Storage::put($path, $content);
-    //     if ($file) {
-    //         $payload = [
-    //             'name' => $file_name,
-    //             'path' => $path,
-    //             'delivery_date' => $today,
-    //             'modifier' => $modifier,
-    //             'size' => Storage::size($path),
-    //             'lines_number' => $lines_number,
-    //             'bank_id' => 4,
-    //             'file_status' => 'completed',
-    //         ];
-    //         File::create($payload);
-    //     }
-
-    //     return $file;
-    // }
 }
