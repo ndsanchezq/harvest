@@ -10,6 +10,13 @@ class Payment extends Model
     use HasFactory;
 
     /**
+     * disable timestamps
+     * 
+     * @var boolean
+     */
+    public $timestamps = false;
+
+    /**
      * The connection name for the model.
      *
      * @var string|null
@@ -37,9 +44,21 @@ class Payment extends Model
         'status',
         'users_creator',
         'users_at_update',
-        'created_at',
-        'created_at_db',
+        'create_at',
+        'create_at_db',
+        'update_at',
         'agreement_lines_id',
-        'agreement_id'
+        'agreement_id',
+        'payment_status',
+        'brand_id',
+        'source_payment',
+        'payment_method_id',
+        'box_id',
+        'transaction_method',
+        'voucher_number',
+        'bank_id',
+        'invoice_id',
+        'card_cd',
+        'franchise_id'
     ];
 }

@@ -40,6 +40,14 @@ class AgreementLineDeferredPayment extends Model
     }
 
     /**
+     * Get customer associated with the payment method.
+     */
+    public function invoiceLines()
+    {
+        return $this->belongsTo(InvoiceLine::class, 'id', 'agreement_line_deferred_payment_id');
+    }
+
+    /**
      * Scope a query to only include agreements actives
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
@@ -70,6 +78,23 @@ class AgreementLineDeferredPayment extends Model
                     $subq->whereIn('account_type', [1, 2]);
                     // ->where('payment_method_validation_status', 'validada');
                 });
+        });
+    }
+
+    /**
+     * Scope a query to include payments with no process or rejected
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeNotPaymentInProcess($query)
+    {
+        return $query->whereHas('invoiceLines', function ($invoice_line_query) {
+            $invoice_line_query->whereHas('invoice', function ($invoice_query) {
+                $invoice_query->whereHas('payment', function ($payment_query) {
+                    $payment_query->whereNull('id')->orWhereIn('payment_status', [4, 5]);
+                });
+            });
         });
     }
 
