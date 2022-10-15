@@ -36,8 +36,8 @@ class GenerateCashingRegisterDetailCase
                 $accountNumber = FormatString::fill($row->agreementLines->paymentMethod->account, '0', 17);
                 $accountType = '0' . $row->agreementLines->paymentMethod->account_type; // 01 -> Ahorros | 02 -> Corriente
                 $optionalDidCustomer = FormatString::fill($row->customer->did, '0', 10);
-                $name = strtoupper($row->customer->first_name . ' ' . $row->customer->last_name);
-                $nameCustomer = strlen($name) > 22 ? substr($name, 0, 22) : (strlen($name) ? $name . str_repeat(' ', 22 - strlen($name)) : $name);
+                $name = strtoupper(FormatString::removeAccents($row->customer->first_name . ' ' . $row->customer->last_name));
+                $nameCustomer = FormatString::fill($name, ' ', 22, true);
                 $whiteSpaceReseverd = FormatString::fill(' ', ' ', 24);
 
                 $content .= implode([
