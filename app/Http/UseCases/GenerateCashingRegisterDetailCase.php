@@ -25,7 +25,7 @@ class GenerateCashingRegisterDetailCase
             foreach ($deferred_payments->cursor() as $row) {
                 $row->load('customer:id,did,first_name,last_name');
                 $row->load(['agreementLines' => function ($q) {
-                    $q->with(['paymentMethod', 'agreement']);
+                    $q->with(['paymentMethod', 'agreement', 'product']);
                 }]);
 
                 $didCustomer = FormatString::fill($row->customer->did, '0', 48);
@@ -80,7 +80,7 @@ class GenerateCashingRegisterDetailCase
                 $payment->agreement_id = $row->agreementLines->agreement->id;
                 $payment->payment_status = 2;
                 $payment->brand_id = $row->agreementLines->agreement->brand_id;
-                $payment->payment_method = $row->agreementLines->paymentMethod->id;
+                $payment->payment_method_id = $row->agreementLines->paymentMethod->id;
                 $payment->transaction_method = 'automatic';
                 $payment->bank_id = $row->agreementLines->paymentMethod->banks_id;
                 $payment->save();
@@ -92,7 +92,7 @@ class GenerateCashingRegisterDetailCase
             return [$content, $counter];
         } catch (\Exception $ex) {
             DB::rollback();
-            echo "\n" . 'Error>>>>>  ' .  $ex->getMessage();
+            echo "\n" . 'Error>>>>>  ' .  $ex->getMessage() . ' on line ' . $ex->getLine();
         }
     }
 }
