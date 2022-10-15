@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -29,9 +30,7 @@ Route::get('/users', function () {
 })->name('users');
 
 Route::prefix('files')->group(function () {
-    route::get('/list', function () {
-        return Inertia::render('Files/List');
-    })->name('list');
+    route::get('/list', [FileController::class, 'index'])->name('list');
 });
 
 Route::get('/', function () {

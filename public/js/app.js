@@ -3527,6 +3527,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 function FilesList(props) {
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(function () {
+    console.log(props === null || props === void 0 ? void 0 : props.files);
+  }, [props === null || props === void 0 ? void 0 : props.files]);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(_Layouts_Authenticated__WEBPACK_IMPORTED_MODULE_0__["default"], {
     auth: props.auth,
     errors: props.errors,

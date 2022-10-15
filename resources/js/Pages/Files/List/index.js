@@ -1,7 +1,10 @@
 import Authenticated from "@/Layouts/Authenticated";
-import React from "react";
+import React, { useEffect } from "react";
 
 function FilesList(props) {
+  useEffect(() => {
+    console.log(props?.files);
+  }, [props?.files]);
   return (
     <Authenticated auth={props.auth} errors={props.errors}>
       <div className="py-12">
