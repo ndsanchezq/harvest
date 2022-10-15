@@ -22,12 +22,12 @@ class GenerateNoveltyFileCase
         $modifier = 'C';
         $file_type = 'novedad';
         $today = now()->format('Y-m-d');
-        $bancolombia_payment_methods = PaymentMethod::query()->accountsForValidating()->bancolombia()->take(10);
-        $other_banks_payment_methods = PaymentMethod::query()->accountsForValidating()->otherBanks()->take(10);
+        $bancolombia_payment_methods = PaymentMethod::query()->accountsForValidating()->bancolombia()->take(10000);
+        $other_banks_payment_methods = PaymentMethod::query()->accountsForValidating()->otherBanks()->take(10000);
 
         /**Generar Novedades para cuentas bancolombia */
         if ($bancolombia_payment_methods->count() < 1) {
-            echo "No se genero archivo novedades para cuentas Bancolombia";
+            echo "No se genero archivo novedades para cuentas Bancolombia" . PHP_EOL;
         } else {
             // Registro de encabezado del archivo y registro de encabezado del lote
             [$headerRules, $headerLotRules, $bancolombia_content_file] = GetHeaderRulesCase::index($set_number, $modifier);
@@ -49,7 +49,7 @@ class GenerateNoveltyFileCase
         $modifier = 'D';
         /**Generar Novedades para cuentas otros bancos */
         if ($other_banks_payment_methods->count() < 1) {
-            echo "No se genero archivo novedades para cuentas Bancolombia";
+            echo "No se genero archivo novedades para cuentas ACH" . PHP_EOL;
         } else {
             // Registro de encabezado del archivo y registro de encabezado del lote
             [$headerRules, $headerLotRules, $other_banks_content_file] = GetHeaderRulesCase::index($set_number, $modifier);
@@ -122,6 +122,11 @@ class GenerateNoveltyFileCase
                 . "\n";
 
             $counter++;
+
+            // payment_method_validation_status = 'en proceso'
+            $payment_method->payment_method_validation_status = 2;
+            $payment_method->payment_method_validation_date = now()->format('Y-m-d');
+            $payment_method->save();
         }
 
         return [$content, $counter];
