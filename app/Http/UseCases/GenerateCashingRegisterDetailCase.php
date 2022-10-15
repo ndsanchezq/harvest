@@ -3,7 +3,6 @@
 namespace App\Http\UseCases;
 
 use App\Http\Utils\FormatString;
-use App\Models\MyBodyTech\Invoice;
 use App\Models\MyBodyTech\Payment;
 use Illuminate\Support\Facades\DB;
 

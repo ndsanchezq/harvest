@@ -31,6 +31,7 @@ Route::get('/users', function () {
 
 Route::prefix('files')->group(function () {
     route::get('/list', [FileController::class, 'index'])->name('list');
+    route::get('/download/{id}', [FileController::class, 'getFile'])->name('files.download');
 });
 
 Route::get('/', function () {
