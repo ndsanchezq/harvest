@@ -73,4 +73,12 @@ class InvoiceLine extends Model
         'buy_product_status_id',
         'agreement_line_deferred_payment_id'
     ];
+
+    /**
+     * Get associated invoice
+     */
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class, 'invoice_id', 'id');
+    }
 }

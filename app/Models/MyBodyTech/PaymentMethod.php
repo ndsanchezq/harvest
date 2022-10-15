@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class PaymentMethod extends Model
 {
     use HasFactory;
-
     /**
      * The connection name for the model.
      *

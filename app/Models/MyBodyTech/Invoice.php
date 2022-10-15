@@ -89,4 +89,13 @@ class Invoice extends Model
         'status_send_electronic',
         'credit_note_type'
     ];
+
+
+    /**
+     * Get associated payment
+     */
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class, 'id', 'invoice_id');
+    }
 }
