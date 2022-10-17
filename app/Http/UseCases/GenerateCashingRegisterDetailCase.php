@@ -60,29 +60,11 @@ class GenerateCashingRegisterDetailCase
                     "\n"
                 ]);
 
-                //generate Invoice
+                //generate invoice
                 $invoice = GenerateDraftInvoice::index($row);
 
-
                 // generate payment
-                $payment = new Payment();
-                $payment->payment_date = $today;
-                $payment->amount = $row->amount;
-                $payment->payment_type_id = 2;
-                $payment->num_payment = 1;
-                $payment->status = 1;
-                $payment->users_creator = 2661; //cambiar a usuario debito automatico
-                $payment->create_at = $today;
-                $payment->invoice_id = $invoice->id;
-                $payment->create_at_db = $today;
-                $payment->agreement_lines_id = $row->agreementLines->id;
-                $payment->agreement_id = $row->agreementLines->agreement->id;
-                $payment->payment_status = 2;
-                $payment->brand_id = $row->agreementLines->agreement->brand_id;
-                $payment->payment_method_id = $row->agreementLines->paymentMethod->id;
-                $payment->transaction_method = 'automatic';
-                $payment->bank_id = $row->agreementLines->paymentMethod->banks_id;
-                $payment->save();
+                $payment = GeneratePaymentCase::index($row, $invoice, 2);
 
                 $counter++;
             }
