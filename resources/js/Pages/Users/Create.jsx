@@ -1,144 +1,168 @@
-// import { useEffect } from 'react';
-// import Authenticated from '@/Layouts/Authenticated';
-// import Label from '@/Components/Label';
-// import Input from '@/Components/Input';
-// import InputError from '@/Components/InputError';
-// import Button from '@/Components/Button';
-// import Checkbox from '@/Components/Checkbox';
-// import { Head, Link, useForm } from '@inertiajs/inertia-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useSnackbar } from 'notistack';
 
-export default function Create(props) {
-  return (<h1>Create</h1>);
-  // const { data, setData, post, errors, processing, reset } = useForm({
-  //   name: '',
-  //   username: '',
-  //   email: '',
-  //   password: '',
-  //   password_confirmation: '',
-  //   status: true
-  // });
+import Main from './Main';
 
-  // useEffect(() => {
-  //   return () => {
-  //     reset('password', 'password_confirmation');
-  //   };
-  // }, []);
+import { Typography, Card, CardContent, Grid, IconButton, InputAdornment } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
 
-  // const onHandleChange = (event) => {
-  //   setData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
-  // };
+import Breadcrumbs from '@/components/Breadcrumbs';
+import Link from '@/components/Link';
+import Form from '@/components/Form';
+import TextField from '@/components/TextField';
+import Checkbox from '@/components/Checkbox';
 
-  // const submit = (e) => {
-  //   e.preventDefault();
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Inertia } from '@inertiajs/inertia';
+import { successToast, errorToast, mapErrors } from '@/utils/misc';
 
-  //   post(route('users.store'));
-  // };
+export default function Create() {
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
-  // return (
-  //   <Authenticated
-  //     auth={props.auth}
-  //     errors={props.errors}
-  //     header={
-  //       <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-  //         <Link className="underline" href={route('users.index')}>Users</Link> / Crear
-  //       </h2>}
-  //   >
-  //     <Head title="Users" />
+  const LoginSchema = yup.object().shape({
+    name: yup.string().required('Name is required'),
+    username: yup.string().min(4).max(25).required('Username is required'),
+    email: yup.string().email().required('Email is required'),
+    password: yup.string().required('Password is required'),
+    password_confirmation: yup.string().required('Password confirm is required')
+  }).required();
 
-  //     <div className="py-12">
-  //       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-  //         <form onSubmit={submit}>
-  //           <div>
-  //             <Label forInput="name" value="Name" />
+  const defaultValues = {
+    name: '',
+    username: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
+    status: true
+  };
 
-  //             <Input
-  //               type="text"
-  //               name="name"
-  //               value={data.name}
-  //               className="mt-1 block w-full"
-  //               autoComplete="name"
-  //               isFocused={true}
-  //               handleChange={onHandleChange}
-  //             />
+  const methods = useForm({
+    resolver: yupResolver(LoginSchema),
+    defaultValues
+  });
 
-  //             <InputError message={errors.name} className="mt-2" />
-  //           </div>
+  const {
+    handleSubmit
+  } = methods;
 
-  //           <div className="mt-4">
-  //             <Label forInput="username" value="Username" />
+  const onSubmit = async (data) => {
+    setLoading(true);
 
-  //             <Input
-  //               type="text"
-  //               name="username"
-  //               value={data.username}
-  //               className="mt-1 block w-full"
-  //               handleChange={onHandleChange}
-  //             />
+    Inertia.post(route('users.store'), data, {
+      onSuccess: () => {
+        enqueueSnackbar('The user has been created!', successToast);
+      },
+      onError: (error) => {
+        setLoading(false);
 
-  //             <InputError message={errors.username} className="mt-2" />
-  //           </div>
+        enqueueSnackbar(mapErrors(error), errorToast);
+      }
+    });
+  };
 
-  //           <div className="mt-4">
-  //             <Label forInput="email" value="Email" />
+  return (
+    <Main
+      breadcrumbs={
+        <Breadcrumbs
+          children={([
+            <Link underline="hover" key="1" color="inherit" href={route('users.index')}>
+              User
+            </Link>,
+            <Typography key="3" color="text.primary">
+              Create
+            </Typography>
+          ])}
+        />
+      }
+      children={(
+        <Card>
+          <CardContent>
+            <Form methods={methods} onSubmit={handleSubmit(onSubmit)}>
+              <Grid container justifyContent="center" alignItems="center" spacing={2}>
+                <Grid item sm={6}>
+                  <TextField
+                    name="name"
+                    label="Name"
+                  />
+                </Grid>
 
-  //             <Input
-  //               type="email"
-  //               name="email"
-  //               value={data.email}
-  //               className="mt-1 block w-full"
-  //               handleChange={onHandleChange}
-  //             />
+                <Grid item sm={6}>
+                  <TextField
+                    name="username"
+                    label="Username"
+                  />
+                </Grid>
 
-  //             <InputError message={errors.email} className="mt-2" />
-  //           </div>
+                <Grid item sm={12}>
+                  <TextField
+                    name="email"
+                    type="email"
+                    label="Email"
+                  />
+                </Grid>
 
-  //           <div className="mt-4">
-  //             <Label forInput="password" value="Password" />
+                <Grid item sm={6}>
+                  <TextField
+                    name="password"
+                    label="Password"
+                    type={showPassword ? 'text' : 'password'}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
 
-  //             <Input
-  //               type="password"
-  //               name="password"
-  //               value={data.password}
-  //               className="mt-1 block w-full"
-  //               handleChange={onHandleChange}
-  //             />
+                <Grid item sm={6}>
+                  <TextField
+                    name="password_confirmation"
+                    label="Password confirm"
+                    type={showPassword ? 'text' : 'password'}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
 
-  //             <InputError message={errors.password} className="mt-2" />
-  //           </div>
+                <Grid item sm={12}>
+                  <Checkbox
+                    name="status"
+                    label="Active"
+                  />
+                </Grid>
 
-  //           <div className="mt-4">
-  //             <Label forInput="password_confirmation" value="Confirm Password" />
-
-  //             <Input
-  //               type="password"
-  //               name="password_confirmation"
-  //               value={data.password_confirmation}
-  //               className="mt-1 block w-full"
-  //               handleChange={onHandleChange}
-  //             />
-
-  //             <InputError message={errors.password_confirmation} className="mt-2" />
-  //           </div>
-
-  //           <div className="mt-4">
-  //             <Label forInput="status" value="Status" />
-
-  //             <Checkbox
-  //               name="status"
-  //               value={data.status}
-  //               checked={data.status}
-  //               handleChange={onHandleChange}
-  //             />
-  //           </div>
-
-  //           <div className="flex items-center justify-end mt-4">
-  //             <Button className="ml-4" processing={processing}>
-  //               Crear
-  //             </Button>
-  //           </div>
-  //         </form>
-  //       </div >
-  //     </div >
-  //   </Authenticated >
-  // );
-}
+                <Grid item sm={6}>
+                  <LoadingButton
+                    type="submit"
+                    size="large"
+                    variant="contained"
+                    loading={loading}
+                    fullWidth
+                  >
+                    Create
+                  </LoadingButton>
+                </Grid>
+              </Grid>
+            </Form>
+          </CardContent>
+        </Card>
+      )}
+    />
+  );
+};

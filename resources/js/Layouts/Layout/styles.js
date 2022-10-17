@@ -3,11 +3,12 @@ import { styled } from '@mui/material/styles';
 const APP_BAR_MOBILE = 64;
 const APP_BAR_DESKTOP = 92;
 
-export const RootStyle = styled('div')({
+export const RootStyle = styled('div')(({ theme }) => ({
   display: 'flex',
+  height: '100vh',
   minHeight: '100%',
   overflow: 'hidden'
-});
+}));
 
 export const MainStyle = styled('div')(({ theme }) => ({
   flexGrow: 1,
@@ -19,5 +20,5 @@ export const MainStyle = styled('div')(({ theme }) => ({
     paddingTop: APP_BAR_DESKTOP + 24,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2)
-  }
+  },
 }));

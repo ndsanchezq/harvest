@@ -1,14 +1,16 @@
-import { Box, Link, Drawer, Typography, Avatar, Stack } from '@mui/material';
+import { usePage } from '@inertiajs/inertia-react';
+import { Box, Link, Drawer, Typography, Avatar } from '@mui/material';
 import { RootStyle, AccountStyle, DRAWER_WIDTH } from './styles';
-import useResponsive from '@/Hooks/useResponsive';
-import Scrollbar from '@/Components/Scrollbar';
-import Logo from '@/Components/Logo';
+import useResponsive from '@/hooks/useResponsive';
+import Scrollbar from '@/components/Scrollbar';
+import Logo from '@/components/Logo';
 import NavSection from './NavSection';
 import navConfig from './NavConfig';
 import PropTypes from 'prop-types';
 
-export default function Sidebar({ auth, isOpenSidebar, onCloseSidebar }) {
+export default function Sidebar({ isOpenSidebar, onCloseSidebar }) {
   const isDesktop = useResponsive('up', 'lg');
+  const { auth } = usePage().props;
 
   const renderContent = (
     <Scrollbar
@@ -24,10 +26,13 @@ export default function Sidebar({ auth, isOpenSidebar, onCloseSidebar }) {
       <Box sx={{ mb: 2, mx: 2.5 }}>
         <Link underline="none" to="#">
           <AccountStyle>
-            <Avatar src='{account.photoURL}' alt="photoURL" />
+            <Avatar src="/static/images/avatar/1.jpg" />
             <Box sx={{ ml: 2 }}>
-              <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {/* {auth.user.name} */}
+              <Typography variant="subtitle2" noWrap>
+                {auth.user.name}
+              </Typography>
+              <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                {auth.user.email}
               </Typography>
             </Box>
           </AccountStyle>
@@ -47,7 +52,7 @@ export default function Sidebar({ auth, isOpenSidebar, onCloseSidebar }) {
           open={isOpenSidebar}
           onClose={onCloseSidebar}
           PaperProps={{
-            sx: { width: DRAWER_WIDTH },
+            sx: { width: DRAWER_WIDTH }
           }}
         >
           {renderContent}
@@ -63,6 +68,7 @@ export default function Sidebar({ auth, isOpenSidebar, onCloseSidebar }) {
               width: DRAWER_WIDTH,
               bgcolor: 'background.default',
               borderRightStyle: 'dashed',
+              backgroundColor: '#FFFFFF'
             },
           }}
         >

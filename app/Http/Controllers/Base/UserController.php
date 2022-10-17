@@ -15,9 +15,11 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return inertia('Users/Index', ['users' => User::all()]);
+        $query = User::query();
+        $users = $query->paginate(20);
+        return inertia('Users/Index', compact('users'));
     }
 
     /**
@@ -46,6 +48,7 @@ class UserController extends Controller
                 try {
                     $user->fill($data);
                     $user->password = Hash::make($data['password']);
+                    $user->status = $data['status'] ?? false;
                     $user->save();
 
                     // Commit Transaction
@@ -68,7 +71,7 @@ class UserController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
         //
     }
@@ -81,7 +84,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return inertia('Users/Edit', $user);
+        return inertia('Users/Edit', compact('user'));
     }
 
     /**
@@ -99,6 +102,7 @@ class UserController extends Controller
                 DB::beginTransaction();
                 try {
                     $user->fill($data);
+                    $user->status = $data['status'] ?? false;
                     $user->save();
 
                     // Commit Transaction

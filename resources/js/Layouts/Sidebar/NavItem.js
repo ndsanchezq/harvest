@@ -1,17 +1,14 @@
 import { useState } from 'react';
 import { Link } from "@inertiajs/inertia-react";
+import { alpha, useTheme } from '@mui/material/styles';
+import { Box, List, Collapse, ListItemText } from '@mui/material';
+import { ListItemStyle, ListItemIconStyle } from './styles';
 import PropTypes from 'prop-types';
-
-import { alpha, useTheme, styled } from '@mui/material/styles';
-import { Box, List, Collapse, ListItemText, ListItemIcon, ListItemButton } from '@mui/material';
 
 export default function NavItem({ item, active }) {
   const theme = useTheme();
-
-  const isActiveRoot = active(item.path);
-
+  const isActiveRoot = active(item.title);
   const { title, path, icon, info, children } = item;
-
   const [open, setOpen] = useState(isActiveRoot);
 
   const handleOpen = () => {

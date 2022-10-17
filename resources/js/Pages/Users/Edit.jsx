@@ -1,113 +1,128 @@
-// import { useEffect } from 'react';
-// import Authenticated from '@/Layouts/Authenticated';
-// import Label from '@/Components/Label';
-// import Input from '@/Components/Input';
-// import InputError from '@/Components/InputError';
-// import Button from '@/Components/Button';
-// import Checkbox from '@/Components/Checkbox';
-// import { Head, Link, useForm } from '@inertiajs/inertia-react';
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useSnackbar } from 'notistack';
+
+import Main from './Main';
+
+import { Typography, Card, CardContent, Grid } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+
+import Breadcrumbs from '@/components/Breadcrumbs';
+import Link from '@/components/Link';
+import Form from '@/components/Form';
+import TextField from '@/components/TextField';
+import Checkbox from '@/components/Checkbox';
+
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Inertia } from '@inertiajs/inertia';
+import { successToast, errorToast, mapErrors } from '@/utils/misc';
 
 export default function Edit(props) {
-  return (<h1>Return</h1>);
-  // const { data, setData, put, errors, processing, reset } = useForm({
-  //   name: props.name,
-  //   username: props.username,
-  //   email: props.email,
-  //   status: props.status
-  // });
+  const { id, name, username, email, status } = props.user;
 
-  // useEffect(() => {
-  //   return () => {
-  //     reset('password', 'password_confirmation');
-  //   };
-  // }, []);
+  const [loading, setLoading] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
-  // const onHandleChange = (event) => {
-  //   setData(event.target.name, event.target.type === 'checkbox' ? event.target.checked : event.target.value);
-  // };
+  const LoginSchema = yup.object().shape({
+    name: yup.string().required('Name is required'),
+    username: yup.string().min(4).max(25).required('Username is required'),
+    email: yup.string().email().required('Email is required')
+  }).required();
 
-  // const submit = (e) => {
-  //   e.preventDefault();
+  const defaultValues = { name, username, email, status };
 
-  //   put(route('users.update', {user: props.id}));
-  // };
+  const methods = useForm({
+    resolver: yupResolver(LoginSchema),
+    defaultValues
+  });
 
-  // return (
-  //   <Authenticated
-  //     auth={props.auth}
-  //     errors={props.errors}
-  //     header={
-  //       <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-  //         <Link className="underline" href={route('users.index')}>Users</Link> / {props.id} / Edit
-  //       </h2>}
-  //   >
-  //     <Head title="Users" />
+  const {
+    handleSubmit
+  } = methods;
 
-  //     <div className="py-12">
-  //       <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-  //         <form onSubmit={submit}>
-  //           <div>
-  //             <Label forInput="name" value="Name" />
+  const onSubmit = async (data) => {
+    setLoading(true);
 
-  //             <Input
-  //               type="text"
-  //               name="name"
-  //               value={data.name}
-  //               className="mt-1 block w-full"
-  //               isFocused={true}
-  //               handleChange={onHandleChange}
-  //             />
+    Inertia.put(route('users.update', { user: id }), data, {
+      onSuccess: (resp) => {
+        enqueueSnackbar('The user has been updated!', successToast);
+      },
+      onError: (error) => {
+        setLoading(false);
 
-  //             <InputError message={errors.name} className="mt-2" />
-  //           </div>
+        enqueueSnackbar(mapErrors(error), errorToast);
+      }
+    });
+  };
 
-  //           <div className="mt-4">
-  //             <Label forInput="username" value="Username" />
+  return (
+    <Main
+      breadcrumbs={
+        <Breadcrumbs
+          children={([
+            <Link underline="hover" key="1" color="inherit" href={route('users.index')}>
+              Users
+            </Link>,
+            <Typography key="2" color="text.primary">
+              {name}
+            </Typography>,
+            <Typography key="3" color="text.primary">
+              Edit
+            </Typography>
+          ])}
+        />
+      }
+      children={(
+        <Card>
+          <CardContent>
+            <Form methods={methods} onSubmit={handleSubmit(onSubmit)}>
+              <Grid container justifyContent="center" alignItems="center" spacing={2}>
+                <Grid item sm={6}>
+                  <TextField
+                    name="name"
+                    label="Name"
+                  />
+                </Grid>
 
-  //             <Input
-  //               type="text"
-  //               name="username"
-  //               value={data.username}
-  //               className="mt-1 block w-full"
-  //               handleChange={onHandleChange}
-  //             />
+                <Grid item sm={6}>
+                  <TextField
+                    name="username"
+                    label="Username"
+                  />
+                </Grid>
 
-  //             <InputError message={errors.username} className="mt-2" />
-  //           </div>
+                <Grid item sm={12}>
+                  <TextField
+                    name="email"
+                    type="email"
+                    label="Email"
+                  />
+                </Grid>
 
-  //           <div className="mt-4">
-  //             <Label forInput="email" value="Email" />
+                <Grid item sm={12}>
+                  <Checkbox
+                    name="status"
+                    label="Active"
+                  />
+                </Grid>
 
-  //             <Input
-  //               type="email"
-  //               name="email"
-  //               value={data.email}
-  //               className="mt-1 block w-full"
-  //               handleChange={onHandleChange}
-  //             />
-
-  //             <InputError message={errors.email} className="mt-2" />
-  //           </div>
-
-  //           <div className="mt-4">
-  //             <Label forInput="status" value="Status" />
-
-  //             <Checkbox
-  //               name="status"
-  //               value={data.status}
-  //               checked={data.status}
-  //               handleChange={onHandleChange}
-  //             />
-  //           </div>
-
-  //           <div className="flex items-center justify-end mt-4">
-  //             <Button className="ml-4" processing={processing}>
-  //               Save
-  //             </Button>
-  //           </div>
-  //         </form>
-  //       </div >
-  //     </div >
-  //   </Authenticated >
-  // );
-}
+                <Grid item sm={6}>
+                  <LoadingButton
+                    type="submit"
+                    size="large"
+                    variant="contained"
+                    loading={loading}
+                    fullWidth
+                  >
+                    Save
+                  </LoadingButton>
+                </Grid>
+              </Grid>
+            </Form>
+          </CardContent>
+        </Card>
+      )}
+    />
+  );
+};

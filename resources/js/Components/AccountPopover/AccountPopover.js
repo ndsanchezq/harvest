@@ -1,11 +1,11 @@
-import { useRef, useState } from 'react';
-import { alpha } from '@mui/material/styles';
-import { Box, Divider, Typography, MenuItem, Avatar, IconButton } from '@mui/material';
-import MenuPopover from '@/Components/MenuPopover';
+import { useState } from 'react';
+import { Inertia } from '@inertiajs/inertia';
+import { usePage } from '@inertiajs/inertia-react';
+import { Chip, Avatar, Divider, MenuItem, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
+import MenuPopover from '@/components/MenuPopover';
 
-export default function AccountPopover({ auth }) {
-  const anchorRef = useRef(null);
-
+export default function AccountPopover() {
+  const { auth } = usePage().props;
   const [open, setOpen] = useState(null);
 
   const handleOpen = (event) => {
@@ -18,26 +18,13 @@ export default function AccountPopover({ auth }) {
 
   return (
     <>
-      <IconButton
-        ref={anchorRef}
+      <Chip
+        variant="outlined"
+        color="primary"
+        label={`Hi, ${auth.user.name}`}
+        avatar={<Avatar src="/static/images/avatar/1.jpg" />}
         onClick={handleOpen}
-        sx={{
-          p: 0,
-          ...(open && {
-            '&:before': {
-              zIndex: 1,
-              content: "''",
-              width: '100%',
-              height: '100%',
-              borderRadius: '50%',
-              position: 'absolute',
-              bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8),
-            },
-          }),
-        }}
-      >
-        <Avatar src='http://localhost:3000/static/mock-images/avatars/avatar_default.jpg' alt="photoURL" />
-      </IconButton>
+      />
 
       <MenuPopover
         open={Boolean(open)}
@@ -53,18 +40,25 @@ export default function AccountPopover({ auth }) {
           },
         }}
       >
-        <Box sx={{ my: 1.5, px: 2.5 }}>
-          {/* <Typography variant="subtitle2" noWrap>
-            {auth.user.name}
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {auth.user.email}
-          </Typography> */}
-        </Box>
+        <ListItem>
+          <ListItemAvatar>
+            <Avatar src="/static/images/avatar/1.jpg" />
+          </ListItemAvatar>
+          <ListItemText
+            primary={auth.user.name}
+            secondary={auth.user.email}
+            secondaryTypographyProps={{
+              style: {
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis'
+              }
+            }} />
+        </ListItem>
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+        <Divider />
 
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
+        <MenuItem onClick={() => Inertia.post(route('logout'))} sx={{ m: 1 }}>
           Logout
         </MenuItem>
       </MenuPopover>

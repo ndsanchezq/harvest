@@ -1,13 +1,13 @@
-import { alpha, useTheme, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { ListItemIcon, ListItemButton } from '@mui/material';
 
-export const DRAWER_WIDTH = 280;
+export const DRAWER_WIDTH = 340;
 
 export const RootStyle = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('lg')]: {
     flexShrink: 0,
     width: DRAWER_WIDTH,
-  },
+  }
 }));
 
 export const AccountStyle = styled('div')(({ theme }) => ({
@@ -20,7 +20,7 @@ export const AccountStyle = styled('div')(({ theme }) => ({
 
 // NavItem ----------------------------------------------------------------------
 
-const ListItemStyle = styled((props) => <ListItemButton disableGutters {...props} />)(({ theme }) => ({
+export const ListItemStyle = styled((props) => <ListItemButton disableGutters {...props} />)(({ theme }) => ({
   ...theme.typography.body2,
   height: 48,
   position: 'relative',
@@ -29,7 +29,7 @@ const ListItemStyle = styled((props) => <ListItemButton disableGutters {...props
   borderRadius: theme.shape.borderRadius,
 }));
 
-const ListItemIconStyle = styled(ListItemIcon)({
+export const ListItemIconStyle = styled(ListItemIcon)({
   width: 22,
   height: 22,
   color: 'inherit',
