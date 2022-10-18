@@ -23,12 +23,6 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('users', App\Http\Controllers\Base\UserController::class);
     Route::resource('files', App\Http\Controllers\Base\FileController::class);
-
-
-    Route::prefix('files')->group(function () {
-        route::get('/list', [FileController::class, 'index'])->name('list');
-        route::get('/download/{id}', [FileController::class, 'getFile'])->name('files.download');
-    });
 });
 
 require __DIR__ . '/auth.php';
