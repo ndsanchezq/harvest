@@ -13,7 +13,7 @@ class MakeMercadoPagoPaymentCase
         try {
             //code...
 
-            $ref_external = $deferred_payment->agreementLines->paymentMethod->ref_external ?? 'e9305f414a17790c7ff16b304dd515b5';
+            $ref_external = $deferred_payment->agreementLines->paymentMethod->ref_external;
             $payment_method_id = $deferred_payment->agreementLines->paymentMethod->id;
 
             // if (empty($ref_external)) {

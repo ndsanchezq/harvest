@@ -17,7 +17,9 @@ class FileController extends Controller
      */
     public function index()
     {
-        return inertia('Files/Index');
+        $files = File::where('status', 1)->get();
+
+        return inertia('Files/Index', ['files' => $files]);
     }
 
     public function show(File $file)
