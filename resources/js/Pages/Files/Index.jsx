@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Inertia } from '@inertiajs/inertia';
+import { Link } from '@inertiajs/inertia-react';
 import { useSnackbar } from 'notistack';
 
 import Main from './Main';
 
-import { Typography, Card, CardContent, Grid, FormControlLabel, TextField, Link, Checkbox } from '@mui/material';
+import { Typography, Card, CardContent, Grid, TextField, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { errorToast, mapErrors } from '@/utils/misc';
 
@@ -22,14 +23,12 @@ export default function Index({ files }) {
     Inertia.post(route('files.store'), { file }, {
       forceFormData: true,
       onError: (error) => {
-        setLoading(false);
         enqueueSnackbar(mapErrors(error), errorToast);
+      },
+      onFinish: () => {
+        setLoading(false);
       }
     });
-  }
-
-  const handleChange = (e) => {
-    if (e.target.type == 'file') setFile(e.target.files[0]);
   }
 
   return (
@@ -49,11 +48,11 @@ export default function Index({ files }) {
             <Card>
               <CardContent>
                 <Grid container justifyContent="center" alignItems="center" spacing={2}>
-                  <Grid item sm={10}>
+                  <Grid item sm={5}>
                     <TextField
                       fullWidth
                       variant="standard"
-                      onChange={handleChange}
+                      onChange={(e) => setFile(e.target.files[0])}
                       type="file"
                     />
                   </Grid>
@@ -61,7 +60,7 @@ export default function Index({ files }) {
                   <Grid item sm={2}>
                     <LoadingButton
                       type="button"
-                      size="large"
+                      size="small"
                       variant="contained"
                       onClick={handleButton}
                       loading={loading}
@@ -75,15 +74,31 @@ export default function Index({ files }) {
             </Card>
           </Grid>
 
-          {files?.map((file) => (
-            <Grid item sm={12}>
-              <Card key={file?.id}>
-                <CardContent>
-                  <Link href={`/files/${file?.id}`}>{file?.name}</Link>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
+          <Grid item sm={12}>
+            <Card>
+              <CardContent>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Nombre</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {files?.map(file => (
+                      <TableRow
+                        key={file.id}
+                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                      >
+                        <TableCell component={Link} href={route('files.show', { file: file.id })} scope="user">
+                          {file.name}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </Grid>
         </Grid>
       }
     />
