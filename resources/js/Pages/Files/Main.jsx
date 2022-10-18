@@ -7,7 +7,7 @@ export default function Main({ breadcrumbs, children }) {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h4" gutterBottom>
-            Files
+            Archivos
           </Typography>
         </Stack>
         {breadcrumbs}

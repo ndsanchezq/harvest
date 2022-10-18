@@ -4,7 +4,7 @@ import { useSnackbar } from 'notistack';
 
 import Main from './Main';
 
-import { Typography, Card, CardContent, Grid } from '@mui/material';
+import { Typography, Card, CardContent, Grid, Button } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 
 import Breadcrumbs from '@/components/Breadcrumbs';
@@ -24,7 +24,7 @@ export default function Edit(props) {
   const [loading, setLoading] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
-  const LoginSchema = yup.object().shape({
+  const UserSchema = yup.object().shape({
     name: yup.string().required('Name is required'),
     username: yup.string().min(4).max(25).required('Username is required'),
     email: yup.string().email().required('Email is required')
@@ -33,7 +33,7 @@ export default function Edit(props) {
   const defaultValues = { name, username, email, status };
 
   const methods = useForm({
-    resolver: yupResolver(LoginSchema),
+    resolver: yupResolver(UserSchema),
     defaultValues
   });
 
@@ -46,7 +46,7 @@ export default function Edit(props) {
 
     Inertia.put(route('users.update', { user: id }), data, {
       onSuccess: (resp) => {
-        enqueueSnackbar('The user has been updated!', successToast);
+        enqueueSnackbar('El usuario ha sido actualizado!', successToast);
       },
       onError: (error) => {
         setLoading(false);
@@ -62,13 +62,13 @@ export default function Edit(props) {
         <Breadcrumbs
           children={([
             <Link underline="hover" key="1" color="inherit" href={route('users.index')}>
-              Users
+              Usuario
             </Link>,
             <Typography key="2" color="text.primary">
               {name}
             </Typography>,
             <Typography key="3" color="text.primary">
-              Edit
+              Editar
             </Typography>
           ])}
         />
@@ -81,14 +81,14 @@ export default function Edit(props) {
                 <Grid item sm={6}>
                   <TextField
                     name="name"
-                    label="Name"
+                    label="Nombre"
                   />
                 </Grid>
 
                 <Grid item sm={6}>
                   <TextField
                     name="username"
-                    label="Username"
+                    label="Usuario"
                   />
                 </Grid>
 
@@ -96,18 +96,30 @@ export default function Edit(props) {
                   <TextField
                     name="email"
                     type="email"
-                    label="Email"
+                    label="Correo"
                   />
                 </Grid>
 
                 <Grid item sm={12}>
                   <Checkbox
                     name="status"
-                    label="Active"
+                    label="Activo"
                   />
                 </Grid>
 
-                <Grid item sm={6}>
+                <Grid item sm={3}>
+                  <Button
+                    size="large"
+                    href={route('users.index')}
+                    variant="text"
+                    color="secondary"
+                    fullWidth
+                  >
+                    Cancelar
+                  </Button>
+                </Grid>
+
+                <Grid item sm={3}>
                   <LoadingButton
                     type="submit"
                     size="large"
@@ -115,7 +127,7 @@ export default function Edit(props) {
                     loading={loading}
                     fullWidth
                   >
-                    Save
+                    Guardar
                   </LoadingButton>
                 </Grid>
               </Grid>

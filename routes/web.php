@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\FileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 

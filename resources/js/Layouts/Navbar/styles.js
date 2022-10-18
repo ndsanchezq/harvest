@@ -6,7 +6,7 @@ const APPBAR_MOBILE = 64;
 const APPBAR_DESKTOP = 92;
 
 export const AppBarStyled = styled(AppBar)(({ theme }) => ({
-  boxShadow: '1',
+  boxShadow: 'none',
   backdropFilter: 'blur(6px)',
   WebkitBackdropFilter: 'blur(6px)', // Fix on Mobile
   backgroundColor: alpha(theme.palette.background.default, 0.10),

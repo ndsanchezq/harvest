@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 export default function NavItem({ item, active }) {
   const theme = useTheme();
-  const isActiveRoot = active(item.title);
+  const isActiveRoot = active(item.match);
   const { title, path, icon, info, children } = item;
   const [open, setOpen] = useState(isActiveRoot);
 

@@ -10,7 +10,7 @@ export default function Login() {
 
   return (
     <RootStyle>
-      <Head title="Log in" />
+      <Head title="Iniciar sesión" />
 
       <HeaderStyle>
         <Logo color="#FFFFFF" />
@@ -23,7 +23,7 @@ export default function Login() {
       <Container maxWidth="sm">
         <ContentStyle>
           <Typography variant="h4" gutterBottom>
-            Sign in
+            Iniciar sesión
           </Typography>
 
           <LoginForm />
