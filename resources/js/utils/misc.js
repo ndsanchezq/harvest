@@ -28,8 +28,8 @@ export const formatCurrency = (currency) => {
 };
 
 export const metricFormat = (value) => {
-  if (value > 0 && value < 1000000) {
-    return `${(value / 1000).toFixed(1)}k`;
+  if (value >= 1000 && value < 1000000) {
+    return `${(value / 1000).toFixed(1)}K`;
   }
 
   if (value >= 1000000) {

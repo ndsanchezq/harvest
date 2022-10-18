@@ -1,5 +1,21 @@
-import { Box, Typography } from "@mui/material";
 import React from "react";
+import styled from "@emotion/styled";
+import { Box, Typography } from "@mui/material";
+
+const Container = styled(Box)((props) => ({
+  backgroundColor: "#fff",
+  width: 170,
+  height: 180,
+  boxShadow: "-2px 4px 14px -3px rgba(0,0,0,.2)",
+  borderRadius: 5,
+  padding: 20,
+  display: "inline-flex",
+  cursor: "pointer",
+  transition: "transform .2s",
+  "&:hover": {
+    transform: "scale(1.1)",
+  },
+}));
 
 function SmallPriceCard({
   title,
@@ -9,16 +25,7 @@ function SmallPriceCard({
   iconBackgroundColor = "#3c3c3b",
 }) {
   return (
-    <Box
-      style={{
-        backgroundColor: "#fff",
-        width: 170,
-        height: 180,
-        boxShadow: "-2px 4px 14px -3px rgba(0,0,0,.2)",
-        borderRadius: 5,
-        padding: 20,
-        display: "inline-flex",
-      }}
+    <Container
       display="flex"
       flexDirection="column"
       justifyContent="space-between"
@@ -34,6 +41,7 @@ function SmallPriceCard({
             backgroundColor: iconBackgroundColor,
             width: "fit-content",
             height: "fit-content",
+            boxShadow: "-2px 4px 14px -3px rgba(0,0,0,.2)",
           }}
         >
           {icon}
@@ -44,7 +52,7 @@ function SmallPriceCard({
       </Typography>
       <Typography variant="h5">{value}</Typography>
       <Typography variant="caption">{subtitle}</Typography>
-    </Box>
+    </Container>
   );
 }
 
