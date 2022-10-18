@@ -4,11 +4,16 @@ import { Container, Grid, Typography } from "@mui/material";
 import PaymentIcon from "@mui/icons-material/Payment";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
 import { formatCurrency, metricFormat } from "@/utils/misc";
+import HorizontalStatistics from "@/Components/HorizontalStatistics";
+import DescriptionIcon from "@mui/icons-material/Description";
 
 export default function Dashboard() {
   return (
     <Main title="Dashboard">
       <Container>
+        <Grid item xs={12} style={{ marginBottom: 20 }}>
+          <HorizontalStatistics />
+        </Grid>
         <Grid container spacing={2}>
           <Grid item>
             <SmallPriceCard
@@ -26,6 +31,16 @@ export default function Dashboard() {
               value={`$${metricFormat(10000)}`}
               iconBackgroundColor={"#3c3c3b"}
               icon={<AccountBalanceWalletIcon style={{ color: "#fff" }} />}
+            />
+          </Grid>
+
+          <Grid item>
+            <SmallPriceCard
+              title="Archivos"
+              subtitle={"Registro semanal"}
+              value={`${metricFormat(10000)}b`}
+              iconBackgroundColor={"#EB6608"}
+              icon={<DescriptionIcon style={{ color: "#fff" }} />}
             />
           </Grid>
         </Grid>
