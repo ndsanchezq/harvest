@@ -85,7 +85,7 @@ class GenerateNoveltyFileCase
             $customer_name = FormatString::fill(strtoupper($full_name), ' ', 22, true);
             $max_value = str_repeat('0', 14);
             $transaction_date = now()->format('Ymd');
-            $sequence = FormatString::fill($counter, '0', 7);
+            $sequence = FormatString::fill($counter + 1, '0', 7);
             $response_code = str_repeat(' ', 3);
             $debit_programming_start_date = now()->format('dmY');
             $debit_programming_end_date = str_repeat(' ', 8);

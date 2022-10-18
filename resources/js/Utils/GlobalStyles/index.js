@@ -31,6 +31,9 @@ const useStyles = makeStyles(() =>
         color: "#393939",
       },
       ".Mui-disabled": { opacity: 0.5, cursor: "not-allowed" },
+      "#nprogress .bar": {
+        zIndex: "10000 !important",
+      },
     },
   })
 );
