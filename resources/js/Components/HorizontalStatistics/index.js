@@ -7,6 +7,7 @@ import PriceCheckIcon from "@mui/icons-material/PriceCheck";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import TaskIcon from "@mui/icons-material/Task";
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
+import { RouteSharp } from "@mui/icons-material";
 
 function HorizontalStatistics(props) {
   return (
@@ -30,6 +31,7 @@ function HorizontalStatistics(props) {
           value={1320}
           icon={<PriceCheckIcon style={{ color: "#fff" }} />}
           backgroundIconColor="#57c900"
+          path={"/payments"}
         />
       </Grid>
 

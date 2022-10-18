@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import styled from "@emotion/styled";
+import { Link } from "@inertiajs/inertia-react";
 
 const IconContainer = styled(Box)((props) => ({
   padding: 10,
@@ -25,22 +26,25 @@ function CounterIndicator({
   value,
   icon,
   backgroundIconColor = "#3c3c3b",
+  path = "#",
 }) {
   return (
-    <Container display="flex" justifyContent="center" alignItems="center">
-      <IconContainer
-        backgroundIconColor={backgroundIconColor}
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        {icon}
-      </IconContainer>
-      <Box>
-        <Typography variant="caption">{title}</Typography>
-        <Typography variant="h5">{value}</Typography>
-      </Box>
-    </Container>
+    <Link href={path}>
+      <Container display="flex" justifyContent="center" alignItems="center">
+        <IconContainer
+          backgroundIconColor={backgroundIconColor}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          {icon}
+        </IconContainer>
+        <Box>
+          <Typography variant="caption">{title}</Typography>
+          <Typography variant="h5">{value}</Typography>
+        </Box>
+      </Container>
+    </Link>
   );
 }
 
