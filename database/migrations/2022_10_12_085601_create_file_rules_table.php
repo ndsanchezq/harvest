@@ -24,6 +24,7 @@ class CreateFileRulesTable extends Migration
             $table->string('financial_entity_code_value');
             $table->integer('financial_entity_code_length');
             $table->integer('reserved_white_spaces');
+            $table->enum('file_type', ['novelty', 'cashing']);
             $table->unsignedBigInteger('bank_id');
 
             /** Foreign keys */

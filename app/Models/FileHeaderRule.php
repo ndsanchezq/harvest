@@ -27,6 +27,7 @@ class FileHeaderRule extends Model
         'financial_entity_code_value',
         'financial_entity_code_length',
         'reserved_white_spaces',
+        'file_type',
         'bank_id'
     ];
 
