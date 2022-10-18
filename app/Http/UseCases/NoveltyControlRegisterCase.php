@@ -7,7 +7,7 @@ use App\Http\Utils\FormatString;
 class NoveltyControlRegisterCase
 {
     const REGISTER_TYPE_SET = '08';
-    const REGISTER_TYPE_FILE = '08';
+    const REGISTER_TYPE_FILE = '09';
     /**
      * Generate set control register content for novelty file
      * @author Neil David Sanchez Quintana

@@ -16,7 +16,7 @@ class GenerateNoveltyFileCase
      * @author Neil David Sanchez Quintana
      * @return void
      */
-    public function index()
+    public static function index()
     {
         $set_number = '0003';
         $modifier = 'C';
@@ -30,7 +30,7 @@ class GenerateNoveltyFileCase
             echo "No se genero archivo novedades para cuentas Bancolombia" . PHP_EOL;
         } else {
             // Registro de encabezado del archivo y registro de encabezado del lote
-            [$headerRules, $headerLotRules, $bancolombia_content_file] = GetHeaderRulesCase::index($set_number, $modifier);
+            [$headerRules, $headerLotRules, $bancolombia_content_file] = GetHeaderRulesCase::index($set_number, $modifier, 'novelty');
 
             // Registro de detalle
             [$bancolombia_register_detail, $bancolombia_total_register] = $this->generateDetailRegister($bancolombia_payment_methods);
@@ -52,10 +52,10 @@ class GenerateNoveltyFileCase
             echo "No se genero archivo novedades para cuentas ACH" . PHP_EOL;
         } else {
             // Registro de encabezado del archivo y registro de encabezado del lote
-            [$headerRules, $headerLotRules, $other_banks_content_file] = GetHeaderRulesCase::index($set_number, $modifier);
+            [$headerRules, $headerLotRules, $other_banks_content_file] = GetHeaderRulesCase::index($set_number, $modifier, 'novelty');
 
             // Registro de detalle
-            [$other_banks_register_detail, $other_banks_total_register] = $this->generateDetailRegister($other_banks_payment_methods);
+            [$other_banks_register_detail, $other_banks_total_register] = self::generateDetailRegister($other_banks_payment_methods);
             $other_banks_content_file .= $other_banks_register_detail;
 
             // Registro de control del lote y registro de control del archivo
