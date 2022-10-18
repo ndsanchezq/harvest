@@ -5,6 +5,8 @@ namespace App\Http\UseCases;
 use App\Http\Utils\FormatString;
 use App\Models\MyBodyTech\PaymentMethod;
 use App\Http\UseCases\StoreFileCase;
+use App\Models\File;
+use PhpParser\Node\Stmt\For_;
 
 class GenerateNoveltyFileCase
 {
@@ -16,12 +18,13 @@ class GenerateNoveltyFileCase
      * @author Neil David Sanchez Quintana
      * @return void
      */
-    public function index()
+    public static function index()
     {
-        $set_number = '0003';
+        $today = now()->format('Y-m-d');
+        $files_number = File::where('created_at', '>=', $today)->where('received', 0)->get()->count();
+        $set_number = FormatString::fill($files_number + 1, '0', 4);
         $modifier = 'C';
         $file_type = 'novedad';
-        $today = now()->format('Y-m-d');
         $bancolombia_payment_methods = PaymentMethod::query()->accountsForValidating()->bancolombia()->take(10000);
         $other_banks_payment_methods = PaymentMethod::query()->accountsForValidating()->otherBanks()->take(10000);
 
@@ -30,10 +33,10 @@ class GenerateNoveltyFileCase
             echo "No se genero archivo novedades para cuentas Bancolombia" . PHP_EOL;
         } else {
             // Registro de encabezado del archivo y registro de encabezado del lote
-            [$headerRules, $headerLotRules, $bancolombia_content_file] = GetHeaderRulesCase::index($set_number, $modifier);
+            [$headerRules, $headerLotRules, $bancolombia_content_file] = GetHeaderRulesCase::index($set_number, $modifier, 'novelty');
 
             // Registro de detalle
-            [$bancolombia_register_detail, $bancolombia_total_register] = $this->generateDetailRegister($bancolombia_payment_methods);
+            [$bancolombia_register_detail, $bancolombia_total_register] = self::generateDetailRegister($bancolombia_payment_methods);
             $bancolombia_content_file .= $bancolombia_register_detail;
 
             // Registro de control del lote y registro de control del archivo
@@ -43,19 +46,19 @@ class GenerateNoveltyFileCase
             $file_name = $today . '_BANCOLOMBIA_NOVEDADES.txt';
             $path = 'BANCOLOMBIA/' . $file_name;
             StoreFileCase::index($file_name, $path, $bancolombia_content_file, $modifier, $bancolombia_total_register + 4, $file_type);
+            $set_number = FormatString::fill($files_number + 2, '0', 4);
         }
 
-        $set_number = '0004';
         $modifier = 'D';
         /**Generar Novedades para cuentas otros bancos */
         if ($other_banks_payment_methods->count() < 1) {
             echo "No se genero archivo novedades para cuentas ACH" . PHP_EOL;
         } else {
             // Registro de encabezado del archivo y registro de encabezado del lote
-            [$headerRules, $headerLotRules, $other_banks_content_file] = GetHeaderRulesCase::index($set_number, $modifier);
+            [$headerRules, $headerLotRules, $other_banks_content_file] = GetHeaderRulesCase::index($set_number, $modifier, 'novelty');
 
             // Registro de detalle
-            [$other_banks_register_detail, $other_banks_total_register] = $this->generateDetailRegister($other_banks_payment_methods);
+            [$other_banks_register_detail, $other_banks_total_register] = self::generateDetailRegister($other_banks_payment_methods);
             $other_banks_content_file .= $other_banks_register_detail;
 
             // Registro de control del lote y registro de control del archivo

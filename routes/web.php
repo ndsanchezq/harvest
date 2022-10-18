@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Base\FileController;
+use App\Http\Controllers\Base\PaymentController;
+use App\Http\Controllers\Base\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -19,8 +22,9 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
 
-    Route::resource('users', App\Http\Controllers\Base\UserController::class);
-    Route::resource('files', App\Http\Controllers\Base\FileController::class);
+    Route::resource('users', UserController::class);
+    Route::resource('files', FileController::class);
+    Route::resource('payments', PaymentController::class);
 });
 
 require __DIR__ . '/auth.php';

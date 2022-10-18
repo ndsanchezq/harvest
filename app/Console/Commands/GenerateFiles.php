@@ -39,7 +39,6 @@ class GenerateFiles extends Command
      */
     public function handle()
     {
-        $file = new GenerateNoveltyFileCase();
-        $file->index();
+        GenerateNoveltyFileCase::index();
     }
 }
