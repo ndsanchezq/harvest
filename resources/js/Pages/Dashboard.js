@@ -1,19 +1,14 @@
-import React from "react";
-import Authenticated from "@/Layouts/Authenticated";
-import { Head } from "@inertiajs/inertia-react";
+import Main from "@/layouts/Layout";
+import { Container, Typography } from '@mui/material';
 
-export default function Dashboard(props) {
+export default function Dashboard() {
   return (
-    <Authenticated auth={props.auth} errors={props.errors}>
-      <div className="py-12">
-        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div className="p-6 bg-white border-b border-gray-200">
-              You're logged in!
-            </div>
-          </div>
-        </div>
-      </div>
-    </Authenticated>
+    <Main title="Dashboard">
+      <Container>
+        <Typography variant="h4" sx={{ mb: 5 }}>
+          Holi, Welcome back
+        </Typography>
+      </Container>
+    </Main>
   );
 }

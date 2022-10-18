@@ -16,26 +16,19 @@ use Inertia\Inertia;
 |
 */
 
-// Route::get('/', function () {
-//     return Inertia::render('Welcome', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//     ]);
-// });
+Route::middleware('auth')->group(function () {
+    Route::get('/', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
 
-Route::get('/users', function () {
-    return Inertia::render('Users');
-})->name('users');
+    Route::resource('users', App\Http\Controllers\Base\UserController::class);
+    Route::resource('files', App\Http\Controllers\Base\FileController::class);
 
-Route::prefix('files')->group(function () {
-    route::get('/list', [FileController::class, 'index'])->name('list');
-    route::get('/download/{id}', [FileController::class, 'getFile'])->name('files.download');
+
+    Route::prefix('files')->group(function () {
+        route::get('/list', [FileController::class, 'index'])->name('list');
+        route::get('/download/{id}', [FileController::class, 'getFile'])->name('files.download');
+    });
 });
-
-Route::get('/', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 require __DIR__ . '/auth.php';
