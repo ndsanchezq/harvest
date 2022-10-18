@@ -4,7 +4,7 @@ import { useSnackbar } from 'notistack';
 
 import Main from './Main';
 
-import { Typography, Card, CardContent, Grid, IconButton, InputAdornment } from '@mui/material';
+import { Typography, Card, CardContent, Grid, IconButton, InputAdornment, Button } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { LoadingButton } from '@mui/lab';
 
@@ -24,7 +24,7 @@ export default function Create() {
   const [showPassword, setShowPassword] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
 
-  const LoginSchema = yup.object().shape({
+  const UserSchema = yup.object().shape({
     name: yup.string().required('Name is required'),
     username: yup.string().min(4).max(25).required('Username is required'),
     email: yup.string().email().required('Email is required'),
@@ -42,7 +42,7 @@ export default function Create() {
   };
 
   const methods = useForm({
-    resolver: yupResolver(LoginSchema),
+    resolver: yupResolver(UserSchema),
     defaultValues
   });
 
@@ -55,7 +55,7 @@ export default function Create() {
 
     Inertia.post(route('users.store'), data, {
       onSuccess: () => {
-        enqueueSnackbar('The user has been created!', successToast);
+        enqueueSnackbar('El usuario ha sido creado!', successToast);
       },
       onError: (error) => {
         setLoading(false);
@@ -71,10 +71,10 @@ export default function Create() {
         <Breadcrumbs
           children={([
             <Link underline="hover" key="1" color="inherit" href={route('users.index')}>
-              User
+              Usuario
             </Link>,
             <Typography key="3" color="text.primary">
-              Create
+              Crear
             </Typography>
           ])}
         />
@@ -87,14 +87,14 @@ export default function Create() {
                 <Grid item sm={6}>
                   <TextField
                     name="name"
-                    label="Name"
+                    label="Nombre"
                   />
                 </Grid>
 
                 <Grid item sm={6}>
                   <TextField
                     name="username"
-                    label="Username"
+                    label="Usuario"
                   />
                 </Grid>
 
@@ -102,14 +102,14 @@ export default function Create() {
                   <TextField
                     name="email"
                     type="email"
-                    label="Email"
+                    label="Correo"
                   />
                 </Grid>
 
                 <Grid item sm={6}>
                   <TextField
                     name="password"
-                    label="Password"
+                    label="Contraseña"
                     type={showPassword ? 'text' : 'password'}
                     InputProps={{
                       endAdornment: (
@@ -126,7 +126,7 @@ export default function Create() {
                 <Grid item sm={6}>
                   <TextField
                     name="password_confirmation"
-                    label="Password confirm"
+                    label="Confirmar contraseña"
                     type={showPassword ? 'text' : 'password'}
                     InputProps={{
                       endAdornment: (
@@ -143,11 +143,23 @@ export default function Create() {
                 <Grid item sm={12}>
                   <Checkbox
                     name="status"
-                    label="Active"
+                    label="Activo"
                   />
                 </Grid>
 
-                <Grid item sm={6}>
+                <Grid item sm={3}>
+                  <Button
+                    size="large"
+                    href={route('users.index')}
+                    variant="text"
+                    color="secondary"
+                    fullWidth
+                  >
+                    Cancelar
+                  </Button>
+                </Grid>
+
+                <Grid item sm={3}>
                   <LoadingButton
                     type="submit"
                     size="large"
@@ -155,7 +167,7 @@ export default function Create() {
                     loading={loading}
                     fullWidth
                   >
-                    Create
+                    Crear
                   </LoadingButton>
                 </Grid>
               </Grid>

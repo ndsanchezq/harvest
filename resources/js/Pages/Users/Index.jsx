@@ -17,14 +17,14 @@ export default function Index(props) {
         <Breadcrumbs
           children={([
             <Typography key="1" color="text.primary">
-              Users
+              Usuarios
             </Typography>
           ])}
         />
       }
       createButton={
         <Button variant="contained" component={Link} href={route('users.create')} startIcon={<Iconify icon="eva:plus-fill" />}>
-          New User
+          Nuevo Usuario
         </Button>
       }
       children={(
@@ -33,8 +33,8 @@ export default function Index(props) {
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Name</TableCell>
-                  <TableCell width="15%" align="left">Status</TableCell>
+                  <TableCell>Nombre</TableCell>
+                  <TableCell width="15%" align="left">Estado</TableCell>
                   <TableCell width="10%" align="right"></TableCell>
                 </TableRow>
               </TableHead>
@@ -50,7 +50,7 @@ export default function Index(props) {
                     <TableCell align="left">
                       <Chip
                         variant="outlined"
-                        label={`${user.status ? "Active" : "Inactive"}`}
+                        label={`${user.status ? "Activo" : "Inactivo"}`}
                         color={`${user.status ? "success" : "error"}`}
                         sx={{
                           width: '100%'

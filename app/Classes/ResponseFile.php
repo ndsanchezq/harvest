@@ -11,6 +11,25 @@ class ResponseFile
      * @param [type] $content
      * @return void
      */
+    public function prepareToReadFile($content)
+    {
+        // $this->getHeaderFile($content[0]);
+        // $this->getHeaderLot($content[1]);
+        // $this->getFooterLot($content[count($content) - 2]);
+        // $this->getFooterFile($content[count($content) - 1]);
+
+        // foreach ($file as $key => $value) {
+        //     if ($key > 1 && $key < count($file) - 2) $this->getContent($value);
+        // }
+    }
+
+    /**
+     * Get header content in file
+     *
+     * @author Cristian Machado
+     * @param [type] $content
+     * @return void
+     */
     public function getHeaderFile($content)
     {
         $type_of_register = substr($content, 0, 2);

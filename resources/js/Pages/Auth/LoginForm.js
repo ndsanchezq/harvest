@@ -52,12 +52,12 @@ export default function LoginForm() {
       <Stack spacing={2}>
         <TextField
           name="username"
-          label="Username"
+          label="Usuario"
         />
 
         <TextField
           name="password"
-          label="Password"
+          label="Contraseña"
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -71,7 +71,7 @@ export default function LoginForm() {
         />
 
         <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={loading}>
-          Login
+          Iniciar sesión
         </LoadingButton>
       </Stack>
     </Form>

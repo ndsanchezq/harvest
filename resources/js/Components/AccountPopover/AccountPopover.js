@@ -21,7 +21,7 @@ export default function AccountPopover() {
       <Chip
         variant="outlined"
         color="primary"
-        label={`Hi, ${auth.user.name}`}
+        label={`Hola, ${auth.user.name}`}
         avatar={<Avatar src="/static/images/avatar/1.jpg" />}
         onClick={handleOpen}
       />
@@ -59,7 +59,7 @@ export default function AccountPopover() {
         <Divider />
 
         <MenuItem onClick={() => Inertia.post(route('logout'))} sx={{ m: 1 }}>
-          Logout
+          Cerrar sesión
         </MenuItem>
       </MenuPopover>
     </>

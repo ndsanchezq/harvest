@@ -7,7 +7,7 @@ export default function Main({ createButton, breadcrumbs, children }) {
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="h4" gutterBottom>
-            Users
+            Usuarios
           </Typography>
           {createButton}
         </Stack>

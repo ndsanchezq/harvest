@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Classes\ResponseFile;
 use App\Models\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
+use DB, Log;
 
 class FileController extends Controller
 {
@@ -18,7 +20,6 @@ class FileController extends Controller
     public function index()
     {
         $files = File::where('status', 1)->get();
-
         return inertia('Files/Index', ['files' => $files]);
     }
 
@@ -35,18 +36,26 @@ class FileController extends Controller
      */
     public function store(Request $request)
     {
-        if ($request->hasFile('response')) {
-            $responseFile = new ResponseFile;
+        if ($request->hasFile('file')) {
+            DB::beginTransaction();
+            try {
+                // Get file
+                $file = file($request->file->getPathname());
 
-            $file = file($request->response->getPathname());
+                if (count($file) <= 4) {
+                    throw new \Exception('El archivo no es valido.');
+                }
 
-            $responseFile->getHeaderFile($file[0]);
-            $responseFile->getHeaderLot($file[1]);
-            $responseFile->getFooterLot($file[count($file) - 2]);
-            $responseFile->getFooterFile($file[count($file) - 1]);
+                // Prepare to read file
+                $responseFile = new ResponseFile;
+                $responseFile->prepareToReadFile($file);
 
-            foreach ($file as $key => $value) {
-                if ($key > 1 && $key < count($file) - 2) $responseFile->getContent($value);
+                DB::commit();
+                return redirect()->route('files.index');
+            } catch (\Exception $e) {
+                DB::rollback();
+                Log::error($e->getMessage());
+                throw ValidationException::withMessages([$e->getMessage()]);
             }
         }
     }
