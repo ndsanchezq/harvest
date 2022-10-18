@@ -10,6 +10,13 @@ class AgreementLineDeferredPayment extends Model
     use HasFactory;
 
     /**
+     * disable timestamps
+     * 
+     * @var boolean
+     */
+    public $timestamps = false;
+
+    /**
      * The connection name for the model.
      *
      * @var string|null
@@ -22,6 +29,22 @@ class AgreementLineDeferredPayment extends Model
      * @var string
      */
     protected $table = 'agreement_line_deferred_payment';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'agreement_lines_id',
+        'date',
+        'start_date_of_use',
+        'amount',
+        'status',
+        'payment_status',
+        'customer_id',
+        'invoice_id',
+    ];
 
     /**
      * Get customer associated with the payment method.

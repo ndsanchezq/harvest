@@ -2,6 +2,7 @@
 
 namespace App\Http\UseCases;
 
+use App\Models\MyBodyTech\AgreementLineDeferredPayment;
 use App\Models\MyBodyTech\Invoice;
 use App\Models\MyBodyTech\InvoiceBillingRulling;
 use App\Models\MyBodyTech\InvoiceLine;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Log;
 
 class GenerateDraftInvoice
 {
-    public static function index($deferred_payment)
+    public static function index(AgreementLineDeferredPayment $deferred_payment)
     {
         $today = now()->format('Y-m-d H:i:s');
         $invoice = new Invoice();
