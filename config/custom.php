@@ -75,7 +75,6 @@ return [
             'D55' => 'Cuenta con saldo negativo',
             'D56' => 'Error de datos en transacción enviada al TEF',
             'D57' => 'Transacción rechazada por servidor no disponible',
-            'R00' => 'Transacción exitosa',
             'R01' => 'Fondos insuficientes en entidad ACH',
             'R02' => 'Cuenta cerrada en entidad ACH ',
             'R03' => 'Cuenta no abierta en entidad ACH',
@@ -107,6 +106,7 @@ return [
             'R98' => 'Devolución no definida.'
         ],
         'success' => [
+            'R00' => 'Transacción exitosa',
             'OK0' => 'Validación sin problemas **(Estado transitorio para débitos Bancolombia)',
             'OK1' => 'Débito Total Exitoso',
             'OK2' => 'Débito Parcial Exitoso',

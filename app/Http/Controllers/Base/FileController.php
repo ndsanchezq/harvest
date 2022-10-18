@@ -23,6 +23,12 @@ class FileController extends Controller
         return inertia('Files/Index', ['files' => $files]);
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\File  $file
+     * @return \Illuminate\Http\Response
+     */
     public function show(File $file)
     {
         return Storage::download($file->path);
@@ -39,16 +45,9 @@ class FileController extends Controller
         if ($request->hasFile('file')) {
             DB::beginTransaction();
             try {
-                // Get file
-                $file = file($request->file->getPathname());
-
-                if (count($file) <= 4) {
-                    throw new \Exception('El archivo no es valido.');
-                }
-
                 // Prepare to read file
                 $responseFile = new ResponseFile;
-                $responseFile->prepareToReadFile($file);
+                $responseFile->prepareToReadFile($request->file);
 
                 DB::commit();
                 return redirect()->route('files.index');
