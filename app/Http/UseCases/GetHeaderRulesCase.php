@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Log;
 
 class GetHeaderRulesCase
 {
-    public static function index($set_number = '----', $modifier = '-')
+    public static function index($set_number = '----', $modifier = '-', $file_type)
     {
         // Validations
-        $headerRules = FileHeaderRule::where('bank_id', 4)->first();
+        $headerRules = FileHeaderRule::where('bank_id', 4)->where('file_type', $file_type)->first();
         if (!$headerRules instanceof FileHeaderRule) {
             Log::error('No fue posible recuperar el encabezado del archivo');
             return;

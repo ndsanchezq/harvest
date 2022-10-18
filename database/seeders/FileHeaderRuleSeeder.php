@@ -15,16 +15,32 @@ class FileHeaderRuleSeeder extends Seeder
     public function run()
     {
         FileHeaderRule::insert([
-            'register_type_value' => '01',
-            'register_type_lenght' => 2,
-            'did_main_collector_company_value' => '0830053700',
-            'did_main_collector_company_lenght' => 10,
-            'did_additional_collector_company_value' => 'PATRIMONIOS AUTO',
-            'did_additional_collector_company_lenght' => 16,
-            'financial_entity_code_value' => '007',
-            'financial_entity_code_length' => 3,
-            'reserved_white_spaces' => 182,
-            'bank_id' => 4
+            [
+                'register_type_value' => '01',
+                'register_type_lenght' => 2,
+                'did_main_collector_company_value' => '0830053700',
+                'did_main_collector_company_lenght' => 10,
+                'did_additional_collector_company_value' => 'PATRIMONIOS AUTO',
+                'did_additional_collector_company_lenght' => 16,
+                'financial_entity_code_value' => '007',
+                'financial_entity_code_length' => 3,
+                'reserved_white_spaces' => 176,
+                'file_type' => 'novelty',
+                'bank_id' => 4
+            ],
+            [
+                'register_type_value' => '01',
+                'register_type_lenght' => 2,
+                'did_main_collector_company_value' => '0830053700',
+                'did_main_collector_company_lenght' => 10,
+                'did_additional_collector_company_value' => '0000000000',
+                'did_additional_collector_company_lenght' => 10,
+                'financial_entity_code_value' => '007',
+                'financial_entity_code_length' => 3,
+                'reserved_white_spaces' => 182,
+                'file_type' => 'cashing',
+                'bank_id' => 4
+            ],
         ]);
     }
 }
