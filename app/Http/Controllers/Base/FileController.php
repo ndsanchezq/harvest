@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Base;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Classes\ResponseFile;
+use App\Models\File;
+use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
@@ -16,6 +18,11 @@ class FileController extends Controller
     public function index()
     {
         return inertia('Files/Index');
+    }
+
+    public function show(File $file)
+    {
+        return Storage::download($file->path);
     }
 
     /**

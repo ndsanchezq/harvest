@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateLotHeaderRules extends Migration
+class CreateSetHeaderRules extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateLotHeaderRules extends Migration
      */
     public function up()
     {
-        Schema::create('file_lot_header_rules', function (Blueprint $table) {
+        Schema::create('file_set_header_rules', function (Blueprint $table) {
             $table->id();
             $table->string('register_type_value');
             $table->integer('register_type_lenght');
@@ -38,6 +38,6 @@ class CreateLotHeaderRules extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('file_lot_header_rules');
+        Schema::dropIfExists('file_set_header_rules');
     }
 }

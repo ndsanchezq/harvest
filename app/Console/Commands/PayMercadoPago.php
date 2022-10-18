@@ -2,25 +2,24 @@
 
 namespace App\Console\Commands;
 
-use App\Http\UseCases\GenerateNoveltyFileCase;
+use App\Http\UseCases\MakeCreditCardPaymentsCase;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Log;
 
-class GenerateFiles extends Command
+class PayMercadoPago extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'generate:files';
+    protected $signature = 'mercado:pago';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Generar archivos de novedades y cobros';
+    protected $description = 'Realizar debitos automaticos a traves de mercado pago';
 
     /**
      * Create a new command instance.
@@ -39,7 +38,6 @@ class GenerateFiles extends Command
      */
     public function handle()
     {
-        $file = new GenerateNoveltyFileCase();
-        $file->index();
+        MakeCreditCardPaymentsCase::index();
     }
 }
