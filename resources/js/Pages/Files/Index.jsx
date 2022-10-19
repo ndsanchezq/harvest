@@ -20,19 +20,23 @@ export default function Index({ files }) {
   const [orderBy, setOrderBy] = useState('name');
 
   const handleButton = () => {
-    if (file.type !== 'text/plain') return;
+    if (file.type !== "text/plain") return;
 
     setLoading(true);
-    Inertia.post(route('files.store'), { file }, {
-      forceFormData: true,
-      onError: (error) => {
-        enqueueSnackbar(mapErrors(error), errorToast);
-      },
-      onFinish: () => {
-        setLoading(false);
+    Inertia.post(
+      route("files.store"),
+      { file },
+      {
+        forceFormData: true,
+        onError: (error) => {
+          enqueueSnackbar(mapErrors(error), errorToast);
+        },
+        onFinish: () => {
+          setLoading(false);
+        },
       }
-    });
-  }
+    );
+  };
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';

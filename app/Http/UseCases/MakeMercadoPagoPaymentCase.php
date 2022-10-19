@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class MakeMercadoPagoPaymentCase
 {
-    public static function index(AgreementLineDeferredPayment $deferred_payment, string $customer_id)
+    public static function index(AgreementLineDeferredPayment $deferred_payment, string $customer_id, $my_bodytech_token)
     {
 
         try {
@@ -82,7 +82,7 @@ class MakeMercadoPagoPaymentCase
                 $response = json_decode($curl_response);
                 print_r($response);
                 if ($response->status == 'approved') {
-                    echo 'Success, pago realizado!';
+                    Log::info('Success, pago realizado!');
                     $status = 'success';
                     $data = $response;
                     // actualizar estados del pago
@@ -92,6 +92,7 @@ class MakeMercadoPagoPaymentCase
                     $payment->status = 1;
                     $payment->payment_status = 1;
                     $payment->save();
+                    GenerateElectronicInvoice::index($invoice->id, $my_bodytech_token, $deferred_payment->customer->brand_id);
                 } else {
                     // actualizar estados del pago
                     $deferred_payment->status = 1;
