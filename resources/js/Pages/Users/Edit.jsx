@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 
-import Main from './Main';
+import Main from '@/Layouts/Layout/Main';
 
 import { Typography, Card, CardContent, Grid, Button } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -58,83 +58,81 @@ export default function Edit(props) {
 
   return (
     <Main
+      title="Usuarios"
       breadcrumbs={
-        <Breadcrumbs
-          children={([
-            <Link underline="hover" key="1" color="inherit" href={route('users.index')}>
-              Usuario
-            </Link>,
-            <Typography key="2" color="text.primary">
-              {name}
-            </Typography>,
-            <Typography key="3" color="text.primary">
-              Editar
-            </Typography>
-          ])}
-        />
+        <Breadcrumbs>
+          <Link underline="hover" key="1" color="inherit" href={route('users.index')}>
+            Usuario
+          </Link>,
+          <Typography key="2" color="text.primary">
+            {name}
+          </Typography>,
+          <Typography key="3" color="text.primary">
+            Editar
+          </Typography>
+        </Breadcrumbs>
       }
-      children={(
-        <Card>
-          <CardContent>
-            <Form methods={methods} onSubmit={handleSubmit(onSubmit)}>
-              <Grid container justifyContent="center" alignItems="center" spacing={2}>
-                <Grid item sm={6}>
-                  <TextField
-                    name="name"
-                    label="Nombre"
-                  />
-                </Grid>
-
-                <Grid item sm={6}>
-                  <TextField
-                    name="username"
-                    label="Usuario"
-                  />
-                </Grid>
-
-                <Grid item sm={12}>
-                  <TextField
-                    name="email"
-                    type="email"
-                    label="Correo"
-                  />
-                </Grid>
-
-                <Grid item sm={12}>
-                  <Checkbox
-                    name="status"
-                    label="Activo"
-                  />
-                </Grid>
-
-                <Grid item sm={3}>
-                  <Button
-                    size="large"
-                    href={route('users.index')}
-                    variant="text"
-                    color="secondary"
-                    fullWidth
-                  >
-                    Cancelar
-                  </Button>
-                </Grid>
-
-                <Grid item sm={3}>
-                  <LoadingButton
-                    type="submit"
-                    size="large"
-                    variant="contained"
-                    loading={loading}
-                    fullWidth
-                  >
-                    Guardar
-                  </LoadingButton>
-                </Grid>
+    >
+      <Card>
+        <CardContent>
+          <Form methods={methods} onSubmit={handleSubmit(onSubmit)}>
+            <Grid container justifyContent="center" alignItems="center" spacing={2}>
+              <Grid item sm={6}>
+                <TextField
+                  name="name"
+                  label="Nombre"
+                />
               </Grid>
-            </Form>
-          </CardContent>
-        </Card>
-      )}
-    />
+
+              <Grid item sm={6}>
+                <TextField
+                  name="username"
+                  label="Usuario"
+                />
+              </Grid>
+
+              <Grid item sm={12}>
+                <TextField
+                  name="email"
+                  type="email"
+                  label="Correo"
+                />
+              </Grid>
+
+              <Grid item sm={12}>
+                <Checkbox
+                  name="status"
+                  label="Activo"
+                />
+              </Grid>
+
+              <Grid item sm={3}>
+                <Button
+                  size="large"
+                  href={route('users.index')}
+                  variant="text"
+                  color="secondary"
+                  fullWidth
+                >
+                  Cancelar
+                </Button>
+              </Grid>
+
+              <Grid item sm={3}>
+                <LoadingButton
+                  type="submit"
+                  size="large"
+                  variant="contained"
+                  loading={loading}
+                  fullWidth
+                >
+                  Guardar
+                </LoadingButton>
+              </Grid>
+            </Grid>
+          </Form>
+        </CardContent>
+      </Card>
+    </Main>
   );
 };

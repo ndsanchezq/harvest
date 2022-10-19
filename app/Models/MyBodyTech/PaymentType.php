@@ -5,9 +5,16 @@ namespace App\Models\MyBodyTech;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Agreement extends Model
+class PaymentType extends Model
 {
     use HasFactory;
+
+    /**
+     * disable timestamps
+     *
+     * @var boolean
+     */
+    public $timestamps = false;
 
     /**
      * The connection name for the model.
@@ -21,13 +28,5 @@ class Agreement extends Model
      *
      * @var string
      */
-    protected $table = 'agreement';
-
-    /**
-     * Get the customer associated with the agreements.
-     */
-    public function customer()
-    {
-        return $this->belongsTo(Customer::class, 'customer_id', 'id');
-    }
+    protected $table = 'payment_type';
 }
