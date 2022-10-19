@@ -1,109 +1,34 @@
-import React, { useEffect } from "react";
-import Button from "@/Components/Button";
-import Checkbox from "@/Components/Checkbox";
-import Guest from "@/Layouts/Guest";
-import Input from "@/Components/Input";
-import Label from "@/Components/Label";
-import ValidationErrors from "@/Components/ValidationErrors";
-import { Head, Link, useForm } from "@inertiajs/inertia-react";
+import { Head } from '@inertiajs/inertia-react';
+import { Container, Typography } from '@mui/material';
+import { RootStyle, HeaderStyle, SectionStyle, ContentStyle } from './styles';
+import useResponsive from '@/hooks/useResponsive';
+import Logo from '@/components/Logo';
+import LoginForm from './LoginForm';
 
-export default function Login({ status, canResetPassword }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        username: "",
-        password: "",
-        remember: "",
-    });
+export default function Login() {
+  const mdUp = useResponsive('up', 'md');
 
-    useEffect(() => {
-        return () => {
-            reset("password");
-        };
-    }, []);
+  return (
+    <RootStyle>
+      <Head title="Iniciar sesión" />
 
-    const onHandleChange = (event) => {
-        setData(
-            event.target.name,
-            event.target.type === "checkbox"
-                ? event.target.checked
-                : event.target.value
-        );
-    };
+      <HeaderStyle>
+        <Logo color="#FFFFFF" />
+      </HeaderStyle>
 
-    const submit = (e) => {
-        e.preventDefault();
+      {mdUp && (
+        <SectionStyle />
+      )}
 
-        post(route("login"));
-    };
+      <Container maxWidth="sm">
+        <ContentStyle>
+          <Typography variant="h4" gutterBottom>
+            Iniciar sesión
+          </Typography>
 
-    return (
-        <Guest>
-            <Head title="Log in" />
-
-            {status && (
-                <div className="mb-4 font-medium text-sm text-green-600">
-                    {status}
-                </div>
-            )}
-
-            <ValidationErrors errors={errors} />
-
-            <form onSubmit={submit}>
-                <div>
-                    <Label forInput="username" value="Usuario" />
-
-                    <Input
-                        type="text"
-                        name="username"
-                        value={data.username}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        isFocused={true}
-                        handleChange={onHandleChange}
-                    />
-                </div>
-
-                <div className="mt-4">
-                    <Label forInput="password" value="Contraseña" />
-
-                    <Input
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                        handleChange={onHandleChange}
-                    />
-                </div>
-
-                <div className="block mt-4">
-                    <label className="flex items-center">
-                        <Checkbox
-                            name="remember"
-                            value={data.remember}
-                            handleChange={onHandleChange}
-                        />
-
-                        <span className="ml-2 text-sm text-gray-600">
-                            Recordarme
-                        </span>
-                    </label>
-                </div>
-
-                <div className="flex items-center justify-end mt-4">
-                    {/* {canResetPassword && (
-                        <Link
-                            href={route('password.request')}
-                            className="underline text-sm text-gray-600 hover:text-gray-900"
-                        >
-                            Forgot your password?
-                        </Link>
-                    )} */}
-
-                    <Button className="ml-4" processing={processing}>
-                        Ingresar
-                    </Button>
-                </div>
-            </form>
-        </Guest>
-    );
+          <LoginForm />
+        </ContentStyle>
+      </Container>
+    </RootStyle>
+  );
 }

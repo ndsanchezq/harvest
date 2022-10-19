@@ -1,19 +1,50 @@
-import React from "react";
-import Authenticated from "@/Layouts/Authenticated";
-import { Head } from "@inertiajs/inertia-react";
+import SmallPriceCard from "@/Components/SmallPriceCard";
+import Main from "@/layouts/Layout";
+import { Container, Grid, Typography } from "@mui/material";
+import PaymentIcon from "@mui/icons-material/Payment";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import { formatCurrency, metricFormat } from "@/utils/misc";
+import HorizontalStatistics from "@/Components/HorizontalStatistics";
+import DescriptionIcon from "@mui/icons-material/Description";
 
-export default function Dashboard(props) {
+export default function Dashboard() {
   return (
-    <Authenticated auth={props.auth} errors={props.errors}>
-      <div className="py-12">
-        <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-          <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-            <div className="p-6 bg-white border-b border-gray-200">
-              You're logged in!
-            </div>
-          </div>
-        </div>
-      </div>
-    </Authenticated>
+    <Main title="Dashboard">
+      <Container>
+        <Grid item xs={12} style={{ marginBottom: 20 }}>
+          <HorizontalStatistics />
+        </Grid>
+        <Grid container spacing={2}>
+          <Grid item>
+            <SmallPriceCard
+              title="Mercado pago"
+              subtitle={"Beneficio semanal"}
+              value={`$${metricFormat(25400000)}`}
+              iconBackgroundColor={"#57C900"}
+              icon={<PaymentIcon style={{ color: "#fff" }} />}
+            />
+          </Grid>
+          <Grid item>
+            <SmallPriceCard
+              title="Debito bancario"
+              subtitle={"Beneficio semanal"}
+              value={`$${metricFormat(10000)}`}
+              iconBackgroundColor={"#3c3c3b"}
+              icon={<AccountBalanceWalletIcon style={{ color: "#fff" }} />}
+            />
+          </Grid>
+
+          <Grid item>
+            <SmallPriceCard
+              title="Archivos"
+              subtitle={"Registro semanal"}
+              value={`${metricFormat(10000)}b`}
+              iconBackgroundColor={"#EB6608"}
+              icon={<DescriptionIcon style={{ color: "#fff" }} />}
+            />
+          </Grid>
+        </Grid>
+      </Container>
+    </Main>
   );
 }

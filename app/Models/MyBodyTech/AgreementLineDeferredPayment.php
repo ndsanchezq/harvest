@@ -10,6 +10,13 @@ class AgreementLineDeferredPayment extends Model
     use HasFactory;
 
     /**
+     * disable timestamps
+     * 
+     * @var boolean
+     */
+    public $timestamps = false;
+
+    /**
      * The connection name for the model.
      *
      * @var string|null
@@ -22,6 +29,22 @@ class AgreementLineDeferredPayment extends Model
      * @var string
      */
     protected $table = 'agreement_line_deferred_payment';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'agreement_lines_id',
+        'date',
+        'start_date_of_use',
+        'amount',
+        'status',
+        'payment_status',
+        'customer_id',
+        'invoice_id',
+    ];
 
     /**
      * Get customer associated with the payment method.
@@ -37,6 +60,14 @@ class AgreementLineDeferredPayment extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
+
+    /**
+     * Get customer associated with the payment method.
+     */
+    public function invoiceLines()
+    {
+        return $this->belongsTo(InvoiceLine::class, 'id', 'agreement_line_deferred_payment_id');
     }
 
     /**
@@ -67,9 +98,26 @@ class AgreementLineDeferredPayment extends Model
             $q->where('line_status', 1)
                 ->whereNotNull('payment_method_id')
                 ->whereHas('paymentMethod', function ($subq) {
-                    $subq->whereIn('account_type', [1, 2]);
-                    // ->where('payment_method_validation_status', 'validada');
+                    $subq->whereIn('account_type', [1, 2])
+                        ->where('payment_method_validation_status', 'validada');
                 });
+        });
+    }
+
+    /**
+     * Scope a query to include payments with no process or rejected
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeNotPaymentInProcess($query)
+    {
+        return $query->whereHas('invoiceLines', function ($invoice_line_query) {
+            $invoice_line_query->whereHas('invoice', function ($invoice_query) {
+                $invoice_query->whereHas('payment', function ($payment_query) {
+                    $payment_query->whereNull('id')->orWhereIn('payment_status', [4, 5]);
+                });
+            });
         });
     }
 

@@ -40,6 +40,14 @@ class AgreementLine extends Model
     }
 
     /**
+     * Get the payment method associated with the agreement line.
+     */
+    public function agreement()
+    {
+        return $this->belongsTo(Agreement::class, 'agreement_id', 'id');
+    }
+
+    /**
      * Get all deferreds associated with the agreement line.
      */
     public function deferredsPayment()

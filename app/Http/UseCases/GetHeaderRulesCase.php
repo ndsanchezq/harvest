@@ -3,22 +3,22 @@
 namespace App\Http\UseCases;
 
 use App\Models\FileHeaderRule;
-use App\Models\FileLotHeaderRule;
+use App\Models\FileSetHeaderRule;
 use Illuminate\Support\Facades\Log;
 
 class GetHeaderRulesCase
 {
-    public static function index($set_number = '----', $modifier = '-')
+    public static function index($set_number = '----', $modifier = '-', $file_type)
     {
         // Validations
-        $headerRules = FileHeaderRule::where('bank_id', 4)->first();
+        $headerRules = FileHeaderRule::where('bank_id', 4)->where('file_type', $file_type)->first();
         if (!$headerRules instanceof FileHeaderRule) {
             Log::error('No fue posible recuperar el encabezado del archivo');
             return;
         }
 
-        $headerLotRules = FileLotHeaderRule::where('bank_id', 4)->first();
-        if (!$headerLotRules instanceof FileLotHeaderRule) {
+        $headerLotRules = FileSetHeaderRule::where('bank_id', 4)->first();
+        if (!$headerLotRules instanceof FileSetHeaderRule) {
             Log::error('No fue posible recuperar el encabezado de lote del archivo');
             return;
         }
@@ -44,8 +44,6 @@ class GetHeaderRulesCase
             str_repeat(' ', $headerLotRules->reserved_white_spaces),
             "\n"
         ]);
-
-        echo $content;
 
         return [$headerRules, $headerLotRules, $content];
     }

@@ -1,6 +1,8 @@
 <?php
 
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\Base\FileController;
+use App\Http\Controllers\Base\PaymentController;
+use App\Http\Controllers\Base\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -15,27 +17,14 @@ use Inertia\Inertia;
 |
 */
 
-// Route::get('/', function () {
-//     return Inertia::render('Welcome', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//     ]);
-// });
+Route::middleware('auth')->group(function () {
+    Route::get('/', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
 
-Route::get('/users', function () {
-    return Inertia::render('Users');
-})->name('users');
-
-Route::prefix('files')->group(function () {
-    route::get('/list', function () {
-        return Inertia::render('Files/List');
-    })->name('list');
+    Route::resource('users', UserController::class);
+    Route::resource('files', FileController::class);
+    Route::resource('payments', PaymentController::class);
 });
-
-Route::get('/', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 require __DIR__ . '/auth.php';
