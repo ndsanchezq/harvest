@@ -11,22 +11,28 @@ class MakeMercadoPagoPaymentCase
     {
 
         try {
-            //code...
-
-            $ref_external = $deferred_payment->agreementLines->paymentMethod->ref_external;
+            //prepara los tokens de acceso para mercado pago
+            $token = $deferred_payment->customer->brand_id == 2 ? env('ATHLETIC_TOKEN_MERCADO_PAGO') : env('BODYTECH_TOKEN_MERCADO_PAGO');
+            $public_key = $deferred_payment->customer->brand_id == 2 ? env('PUBLIC_KEY_ATHLETIC') : env('PUBLIC_KEY_BODYTECH');
+            $card_id = $deferred_payment->agreementLines->paymentMethod->token_credit_card;
             $payment_method_id = $deferred_payment->agreementLines->paymentMethod->id;
 
-            // if (empty($ref_external)) {
-            //     $message = 'Campo ref_external vacio en metodo de pago con id ' . $payment_method_id . PHP_EOL;
-            //     echo $message;
-            //     Log::error($message);
-            //     return;
-            // }
+            $card_token = GetCardTokenCase::index($card_id, $token, $public_key);
+
+            if (empty($card_token)) {
+                $message = 'No se pudo obtener el card token para el deferred payment ' . $deferred_payment->id;
+                Log::error($message);
+                return;
+            }
+
+            echo 'Card token: ' . $card_token . PHP_EOL;
+            echo 'public key: ' . $public_key . PHP_EOL;
+            // return;
 
             $payload = [
                 "binary_mode" => true,
                 "description" => "Cobro debito automatico",
-                // "external_reference" => $ref_external, // ref_external de metodo de pago
+                "external_reference" => $card_token, // $card_token de metodo de pago
                 "installments" => 1,
                 "payer" => [
                     "entity_type" => "individual",
@@ -34,8 +40,8 @@ class MakeMercadoPagoPaymentCase
                     "type" => "customer"
                 ],
                 "processing_mode" => "aggregator",
-                "token" => $ref_external, // token_credit_card
-                "transaction_amount" => 1000 // valor a cobrar
+                "token" => $card_token, // card_token credit_card
+                "transaction_amount" => $deferred_payment->amount // valor a cobrar
             ];
 
             // Se genera una factura en draft para asignarsela al payment
@@ -45,14 +51,13 @@ class MakeMercadoPagoPaymentCase
             $payment = GeneratePaymentCase::index($deferred_payment, $invoice, 1);
 
             // consume la api de Mercado Pago
-            $token = $deferred_payment->customer->brand_id == 2 ? env('ATHLETIC_TOKEN_MERCADO_PAGO') : env('BODYTECH_TOKEN_MERCADO_PAGO');
             $curl = curl_init();
             $message = '';
             $data = null;
             $status = 'error';
 
             curl_setopt_array($curl, array(
-                CURLOPT_URL => env('MERCADO_PAGO_API_PAYMENT_URL'),
+                CURLOPT_URL => env('MERCADO_PAGO_API_URL') . '/payments',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => "",
                 CURLOPT_TIMEOUT => 30000,
@@ -77,6 +82,7 @@ class MakeMercadoPagoPaymentCase
                 $response = json_decode($curl_response);
                 print_r($response);
                 if ($response->status == 'approved') {
+                    echo 'Success, pago realizado!';
                     $status = 'success';
                     $data = $response;
                     // actualizar estados del pago
@@ -93,7 +99,7 @@ class MakeMercadoPagoPaymentCase
                     $deferred_payment->save();
                     $payment->status = 1;
                     $payment->payment_status = 5; //rechazado
-                    $payment->payment_reason_rejection = $response->status_detail ?? substr($response->description, 99) ?? 'Desconocido';
+                    $payment->payment_reason_rejection = $response->status_detail ?? substr($response->message, 99) ?? 'Desconocido';
                     $payment->save();
                     $message = '>>> Error: realizando el pago recurrente No. '
                         . $deferred_payment->id . ' con metodo de pago No. '

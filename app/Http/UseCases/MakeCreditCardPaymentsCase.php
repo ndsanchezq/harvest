@@ -9,7 +9,7 @@ class MakeCreditCardPaymentsCase
     public static function index()
     {
         $deferred_payments = AgreementLineDeferredPayment::query()
-            ->active()->mercadoPago()->take(1);
+            ->active()->mercadoPago();
 
         foreach ($deferred_payments->cursor() as $deferred_payment) {
             $deferred_payment->load('customer');
@@ -19,7 +19,7 @@ class MakeCreditCardPaymentsCase
             $response = FetchMercadoPagoCustomerCase::index($deferred_payment->customer);
             if ($response['status'] == 'success') {
                 print_r($deferred_payment->customer->email . ' Brand ' . $deferred_payment->customer->brand_id . ' >> ' . $response['customer_id'] . PHP_EOL);
-                // MakeMercadoPagoPaymentCase::index($deferred_payment, $response['customer_id']);
+                MakeMercadoPagoPaymentCase::index($deferred_payment, $response['customer_id']);
             } else {
                 print_r($response['message'] . PHP_EOL);
             }

@@ -56,8 +56,11 @@ class PaymentMethod extends Model
         'payment_method_status',
         'payment_method_validation_status',
         'payment_method_validation_date',
+        'payment_method_register_date',
         'payment_method_reason_rejection',
-        'payment_reason_rejection'
+        'payment_reason_rejection',
+        'create_at_db',
+        'create_at'
     ];
 
     /**

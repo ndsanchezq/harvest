@@ -59,6 +59,7 @@ class Payment extends Model
         'bank_id',
         'invoice_id',
         'card_cd',
+        'payment_reason_rejection',
         'franchise_id'
     ];
 }
