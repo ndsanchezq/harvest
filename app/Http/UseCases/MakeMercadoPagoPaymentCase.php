@@ -74,14 +74,14 @@ class MakeMercadoPagoPaymentCase
             $err = curl_error($curl);
             curl_close($curl);
 
-            if (false) {
+            if ($err) {
                 echo "cURL Error #:" . $err;
                 $message = $err;
             } else {
                 echo 'cURL success' . PHP_EOL;
                 $response = json_decode($curl_response);
                 print_r($response);
-                if (true) {
+                if ($response->status == 'approved') {
                     Log::info('Success, pago realizado!');
                     $status = 'success';
                     $data = $response;
