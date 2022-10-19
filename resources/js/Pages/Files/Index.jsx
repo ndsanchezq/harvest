@@ -1,13 +1,24 @@
-import { useState } from 'react';
-import { Inertia } from '@inertiajs/inertia';
-import { Link } from '@inertiajs/inertia-react';
-import { useSnackbar } from 'notistack';
+import { useState } from "react";
+import { Inertia } from "@inertiajs/inertia";
+import { Link } from "@inertiajs/inertia-react";
+import { useSnackbar } from "notistack";
 
-import Main from './Main';
+import Main from "./Main";
 
-import { Typography, Card, CardContent, Grid, TextField, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
-import { errorToast, mapErrors } from '@/utils/misc';
+import {
+  Typography,
+  Card,
+  CardContent,
+  Grid,
+  TextField,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+} from "@mui/material";
+import { LoadingButton } from "@mui/lab";
+import { errorToast, mapErrors } from "@/utils/misc";
 
 import Breadcrumbs from "@/components/Breadcrumbs";
 
@@ -17,19 +28,23 @@ export default function Index({ files }) {
   const [file, setFile] = useState({});
 
   const handleButton = () => {
-    if (file.type !== 'text/plain') return;
+    if (file.type !== "text/plain") return;
 
     setLoading(true);
-    Inertia.post(route('files.store'), { file }, {
-      forceFormData: true,
-      onError: (error) => {
-        enqueueSnackbar(mapErrors(error), errorToast);
-      },
-      onFinish: () => {
-        setLoading(false);
+    Inertia.post(
+      route("files.store"),
+      { file },
+      {
+        forceFormData: true,
+        onError: (error) => {
+          enqueueSnackbar(mapErrors(error), errorToast);
+        },
+        onFinish: () => {
+          setLoading(false);
+        },
       }
-    });
-  }
+    );
+  };
 
   return (
     <Main
@@ -47,7 +62,12 @@ export default function Index({ files }) {
           <Grid item sm={12}>
             <Card>
               <CardContent>
-                <Grid container justifyContent="center" alignItems="center" spacing={2}>
+                <Grid
+                  container
+                  justifyContent="center"
+                  alignItems="center"
+                  spacing={2}
+                >
                   <Grid item sm={5}>
                     <TextField
                       fullWidth
@@ -84,13 +104,17 @@ export default function Index({ files }) {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {files?.map(file => (
+                    {files?.map((file) => (
                       <TableRow
                         key={file.id}
-                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
                       >
-                        <TableCell component={Link} href={route('files.show', { file: file.id })} scope="user">
-                          {file.name}
+                        <TableCell scope="user">
+                          <a href={route("files.show", { file: file.id })}>
+                            {file.name}
+                          </a>
                         </TableCell>
                       </TableRow>
                     ))}
