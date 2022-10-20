@@ -1,10 +1,10 @@
 import React from "react";
-import styled from "@emotion/styled";
 import { Box, Typography } from "@mui/material";
+import styled from "@emotion/styled";
 
 const Container = styled(Box)((props) => ({
   backgroundColor: "#fff",
-  width: 160,
+  width: 150,
   height: 180,
   boxShadow: "-2px 4px 14px -3px rgba(0,0,0,.2)",
   borderRadius: 5,
@@ -17,20 +17,16 @@ const Container = styled(Box)((props) => ({
   },
 }));
 
-function SmallPriceCard({
-  title,
-  value,
-  subtitle,
-  icon,
-  iconBackgroundColor = "#3c3c3b",
-}) {
+function DashboardButton({ title, iconBackgroundColor, icon, onClick }) {
   return (
     <Container
       display="flex"
       flexDirection="column"
-      justifyContent="space-between"
+      alignItems="center"
+      justifyContent="center"
+      onClick={onClick}
     >
-      <Box>
+      <Box style={{ marginBottom: 10 }}>
         <Box
           display="flex"
           alignItems="center"
@@ -47,13 +43,11 @@ function SmallPriceCard({
           {icon}
         </Box>
       </Box>
-      <Typography variant="body2">
+      <Typography style={{ textAlign: "center" }} variant="caption">
         <b>{title}</b>
       </Typography>
-      <Typography variant="h5">{value}</Typography>
-      <Typography variant="caption">{subtitle}</Typography>
     </Container>
   );
 }
 
-export default SmallPriceCard;
+export default DashboardButton;

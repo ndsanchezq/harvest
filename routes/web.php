@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Base\CreditCardController;
 use App\Http\Controllers\Base\FileController;
 use App\Http\Controllers\Base\PaymentController;
 use App\Http\Controllers\Base\UserController;
@@ -25,6 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('files', FileController::class);
     Route::resource('payments', PaymentController::class);
+    Route::post('/credit-card/payments', [CreditCardController::class, 'index'])->name('credit_card.payments');
 });
 
 require __DIR__ . '/auth.php';
