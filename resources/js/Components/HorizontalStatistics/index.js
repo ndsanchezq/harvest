@@ -28,7 +28,7 @@ function HorizontalStatistics(props) {
       <Grid item xs={3}>
         <CounterIndicator
           title="Pagos realizados"
-          value={1320}
+          value={props.paymentsMade}
           icon={<PriceCheckIcon style={{ color: "#fff" }} />}
           backgroundIconColor="#57c900"
           path={"/payments"}
@@ -38,7 +38,7 @@ function HorizontalStatistics(props) {
       <Grid item xs={3}>
         <CounterIndicator
           title="Pagos en proceso"
-          value={500}
+          value={props.paymentsInProcess}
           icon={<CurrencyExchangeIcon style={{ color: "#fff" }} />}
           backgroundIconColor="#fc0"
         />
@@ -47,7 +47,7 @@ function HorizontalStatistics(props) {
       <Grid item xs={3}>
         <CounterIndicator
           title="Cuentas en validación"
-          value={20}
+          value={props.accountsInProcess}
           icon={<AccountBalanceIcon style={{ color: "#fff" }} />}
         />
       </Grid>
@@ -55,7 +55,7 @@ function HorizontalStatistics(props) {
       <Grid item xs={3}>
         <CounterIndicator
           title="Cuentas validadas"
-          value={721}
+          value={props.validatesAccounts}
           icon={<TaskIcon style={{ color: "#fff" }} />}
           backgroundIconColor={"#804BDF"}
         />

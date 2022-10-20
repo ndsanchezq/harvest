@@ -147,11 +147,7 @@ class ResponseFile
         }
 
         // // Recovery payment methods with customer_id
-        // $payment_method = PaymentMethod::where([
-        //     ['customer_id', $primary_user_reference],
-        //     ['payment_method_validation_status', 'en proceso'],
-        //     ['banks_id', 4]
-        // ])->first();
+        // $payment_method = PaymentMethod::find($primary_user_reference);
         // if ($payment_method instanceof PaymentMethod) {
         //     if (isset(config('custom.response.errors')[$response_code])) {
         //         $payment_method->payment_method_validation_status = 'rechazada';

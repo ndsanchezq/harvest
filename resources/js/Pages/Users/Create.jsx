@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSnackbar } from 'notistack';
 
-import Main from './Main';
+import Main from '@/Layouts/Layout/Main';
 
 import { Typography, Card, CardContent, Grid, IconButton, InputAdornment, Button } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
@@ -67,17 +67,16 @@ export default function Create() {
 
   return (
     <Main
+      title="Usuarios"
       breadcrumbs={
-        <Breadcrumbs
-          children={([
-            <Link underline="hover" key="1" color="inherit" href={route('users.index')}>
-              Usuario
-            </Link>,
-            <Typography key="3" color="text.primary">
-              Crear
-            </Typography>
-          ])}
-        />
+        <Breadcrumbs>
+          <Link underline="hover" key="1" color="inherit" href={route('users.index')}>
+            Usuario
+          </Link>,
+          <Typography key="3" color="text.primary">
+            Crear
+          </Typography>
+        </Breadcrumbs>
       }
       children={(
         <Card>

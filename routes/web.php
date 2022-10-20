@@ -3,8 +3,8 @@
 use App\Http\Controllers\Base\FileController;
 use App\Http\Controllers\Base\PaymentController;
 use App\Http\Controllers\Base\UserController;
+use App\Http\Controllers\Base\DashboardController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,13 +18,11 @@ use Inertia\Inertia;
 */
 
 Route::middleware('auth')->group(function () {
-    Route::get('/', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::resource('users', UserController::class);
     Route::resource('files', FileController::class);
-    Route::resource('payments', PaymentController::class);
+    Route::resource('users', UserController::class);
+    Route::resource('payments', PaymentController::class)->only('index');
 });
 
 require __DIR__ . '/auth.php';

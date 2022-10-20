@@ -1,9 +1,11 @@
 import Layout from "@/layouts/Layout";
 import { Stack, Container, Typography } from "@mui/material";
 
-export default function Main({ breadcrumbs, children, title }) {
+export default function Main({ title, createButton, breadcrumbs, children }) {
   return (
-    <Layout title="Files">
+    <Layout
+      title={title}
+    >
       <Container>
         <Stack
           direction="row"
@@ -13,6 +15,7 @@ export default function Main({ breadcrumbs, children, title }) {
           <Typography variant="h4" gutterBottom>
             {title}
           </Typography>
+          {createButton}
         </Stack>
         {breadcrumbs}
 
