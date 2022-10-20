@@ -16,6 +16,12 @@ const navConfig = [
     icon: getIcon("akar-icons:file"),
   },
   {
+    title: "Pagos",
+    match: "Payments",
+    path: route("payments.index"),
+    icon: getIcon("game-icons:cash"),
+  },
+  {
     title: "Usuarios",
     match: "Users",
     path: route("users.index"),

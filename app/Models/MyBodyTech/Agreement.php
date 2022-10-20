@@ -22,4 +22,12 @@ class Agreement extends Model
      * @var string
      */
     protected $table = 'agreement';
+
+    /**
+     * Get the customer associated with the agreements.
+     */
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
+    }
 }

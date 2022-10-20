@@ -4,7 +4,7 @@ import { Box, Typography } from "@mui/material";
 
 const Container = styled(Box)((props) => ({
   backgroundColor: "#fff",
-  width: 170,
+  width: 160,
   height: 180,
   boxShadow: "-2px 4px 14px -3px rgba(0,0,0,.2)",
   borderRadius: 5,

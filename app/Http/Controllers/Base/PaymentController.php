@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Base;
 
 use App\Http\Controllers\Controller;
+use App\Models\MyBodyTech\Payment;
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -14,28 +15,16 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        return inertia('Payments');
-    }
+        $query = Payment::query();
+        $query->where('transaction_method', 'automatic');
+        $query->where('payment_status', 1);
+        $query->with(['invoice:id,pdf', 'type:id,label', 'agreement' => function ($q) {
+            $q->select('id', 'customer_id')
+                ->with('customer:id,first_name,last_name');
+        }]);
+        $payments = $query->get();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
+        return inertia('Payments', compact('payments'));
     }
 
     /**
@@ -45,40 +34,6 @@ class PaymentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
     {
         //
     }

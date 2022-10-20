@@ -19,7 +19,7 @@ class FileController extends Controller
      */
     public function index()
     {
-        $files = File::where('status', 1)->get();
+        $files = File::where('status', 1)->orderBy('created_at', 'desc')->get();
         return inertia('Files/Index', ['files' => $files]);
     }
 

@@ -11,7 +11,7 @@ class Payment extends Model
 
     /**
      * disable timestamps
-     * 
+     *
      * @var boolean
      */
     public $timestamps = false;
@@ -62,4 +62,28 @@ class Payment extends Model
         'payment_reason_rejection',
         'franchise_id'
     ];
+
+    /**
+     * Get the agreement associated with the payment.
+     */
+    public function agreement()
+    {
+        return $this->belongsTo(Agreement::class, 'agreement_id', 'id');
+    }
+
+    /**
+     * Get the payment type associated with the payment.
+     */
+    public function type()
+    {
+        return $this->hasOne(PaymentType::class, 'id', 'payment_type_id');
+    }
+
+    /**
+     * Get invoice associated with the payment.
+     */
+    public function invoice()
+    {
+        return $this->belongsTo(Invoice::class, 'invoice_id', 'id');
+    }
 }
