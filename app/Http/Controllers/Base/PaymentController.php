@@ -24,7 +24,7 @@ class PaymentController extends Controller
         }]);
         $payments = $query->get();
 
-        return inertia('Payments/Index', compact('payments'));
+        return inertia('Payments', compact('payments'));
     }
 
     /**
