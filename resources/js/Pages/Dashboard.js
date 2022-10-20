@@ -20,6 +20,7 @@ export default function Dashboard({
   mercado_pago,
   bank_debit,
   files,
+  success,
 }) {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
